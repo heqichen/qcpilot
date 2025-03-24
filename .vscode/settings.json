@@ -6,12 +6,22 @@
   "search.exclude": {
     "**/.git": true,
     "**/.venv": true,
-    "**/__pycache__": true
+    "**/__pycache__": true,
+    "common/**": true,
+    "selfdrive/**": true,
+    "system/**": true,
+    "third_party/**": true,
+    "tools/**": true,
   },
   "files.exclude": {
     "**/.git": true,
     "**/.venv": true,
-    "**/__pycache__": true
+    "**/__pycache__": true,
+    "common/**": true,
+    "selfdrive/**": true,
+    "system/**": true,
+    "third_party/**": true,
+    "tools/**": true,
   },
   "python.analysis.exclude": [
     "**/.git",
