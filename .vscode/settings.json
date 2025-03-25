@@ -33,5 +33,17 @@
     "system/**",
     "third_party/**",
     "tools/**",
-  ]
+  ],
+  "files.associations": {
+    "qpushbutton": "cpp",
+    "optional": "cpp",
+    "string": "cpp",
+    "memory": "cpp",
+    "qtimer": "cpp",
+    "__config": "cpp",
+    "chrono": "cpp",
+    "core": "cpp",
+    "algorithm": "cpp",
+    "qcheckbox": "cpp"
+  }
 }

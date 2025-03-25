@@ -1,0 +1,53 @@
+{
+  "env": {
+    "myIncludePath": [
+      "/usr/include",
+      "/usr/include/c++/13",
+      "/usr/include/x86_64-linux-gnu/qt5",
+      "/usr/include/x86_64-linux-gnu/qt5/QtCore",
+      "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+      "${workspaceFolder}",
+      "${workspaceFolder}/third_party/acados/include",
+      "${workspaceFolder}/third_party/acados/include/blasfeo/include",
+      "${workspaceFolder}/third_party/acados/include/hpipm/include",
+      "${workspaceFolder}/third_party/catch2/include",
+      "${workspaceFolder}/third_party/libyuv/include",
+      "${workspaceFolder}/third_party/json11",
+      "${workspaceFolder}/third_party/linux/include",
+      "${workspaceFolder}/third_party",
+      "${workspaceFolder}/msgq"
+    ],
+    "myDefines": []
+  },
+  "configurations": [
+    {
+      "name": "Linux",
+      "compilerPath": "/usr/bin/clang++",
+      "compilerArgs": [
+        "-m32"
+      ],
+      "intelliSenseMode": "linux-clang-x64",
+      "includePath": [
+        "${myIncludePath}"
+      ],
+      "defines": [],
+      "cStandard": "gnu11",
+      "cppStandard": "gnu++14",
+      "configurationProvider": "ms-vscode.cmake-tools",
+      // "forcedInclude": ["${workspaceFolder}/common.h"],
+      // "compileCommands": "${workspaceFolder}/build/compile_commands.json",
+      // "dotConfig": "${workspaceFolder}/.config",
+      "mergeConfigurations": true,
+      "customConfigurationVariables": {
+        // "myVar": "myvalue"
+      },
+      "browse": {
+        // "path": ["${myIncludePath}", "/usr/include", "${workspaceFolder}"],
+        // "limitSymbolsToIncludedHeaders": true,
+        "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
+      }
+    }
+  ],
+  "version": 4,
+  "enableConfigurationSquiggles": true
+}
