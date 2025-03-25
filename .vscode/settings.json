@@ -44,6 +44,9 @@
     "chrono": "cpp",
     "core": "cpp",
     "algorithm": "cpp",
-    "qcheckbox": "cpp"
+    "qcheckbox": "cpp",
+    "mutex": "cpp",
+    "shared_mutex": "cpp",
+    "__mutex_base": "cpp"
   }
 }

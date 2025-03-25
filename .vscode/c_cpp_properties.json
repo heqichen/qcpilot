@@ -1,7 +1,7 @@
 {
   "env": {
     "myIncludePath": [
-      "/usr/include",
+      // "/usr/include",
       "/usr/include/c++/13",
       "/usr/include/x86_64-linux-gnu/qt5",
       "/usr/include/x86_64-linux-gnu/qt5/QtCore",
@@ -24,16 +24,26 @@
       "name": "Linux",
       "compilerPath": "/usr/bin/clang++",
       "compilerArgs": [
-        "-m32"
+        "-fPIC",
+        "-O2",
+        "-Wunused",
+        "-Werror",
+        "-Wshadow",
+        "-Wno-unknown-warning-option",
+        "-Wno-inconsistent-missing-override",
+        "-Wno-c99-designator",
+        "-Wno-reorder-init-list",
+        "-Wno-vla-cxx-extension",
+        "-Wno-deprecated-declarations"
       ],
-      "intelliSenseMode": "linux-clang-x64",
+      "intelliSenseMode": "linux-gcc-x64",
       "includePath": [
         "${myIncludePath}"
       ],
       "defines": [],
       "cStandard": "gnu11",
-      "cppStandard": "gnu++14",
-      "configurationProvider": "ms-vscode.cmake-tools",
+      "cppStandard": "gnu++17",
+      // "configurationProvider": "ms-vscode.cmake-tools",
       // "forcedInclude": ["${workspaceFolder}/common.h"],
       // "compileCommands": "${workspaceFolder}/build/compile_commands.json",
       // "dotConfig": "${workspaceFolder}/.config",
