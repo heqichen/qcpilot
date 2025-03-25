@@ -184,21 +184,20 @@ system/proclogd/proclogd
 system/sensord/sensord
 system/ubloxd/ubloxd
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+tools/replay/api.o
+tools/replay/camera.o
+tools/replay/consoleui.o
+tools/replay/filereader.o
+tools/replay/framereader.o
+tools/replay/libreplay.a
+tools/replay/logreader.o
+tools/replay/main.o
+tools/replay/replay
+tools/replay/replay.o
+tools/replay/route.o
+tools/replay/seg_mgr.o
+tools/replay/timeline.o
+tools/replay/util.o
 
 
 
