@@ -73,7 +73,7 @@ Replay::~Replay() {
 }
 
 bool Replay::load() {
-  rInfo("loading route %s", seg_mgr_->route_.name().c_str());
+  rInfo("loading route [%s]", seg_mgr_->route_.name().c_str());
   if (!seg_mgr_->load()) return false;
 
   min_seconds_ = seg_mgr_->route_.segments().begin()->first * 60;
