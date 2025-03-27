@@ -12,6 +12,7 @@
     "system/**": true,
     "third_party/**": true,
     "tools/**": true,
+    "opendbc_repo/**": true,
   },
   "files.exclude": {
     "**/.git": true,
@@ -22,6 +23,7 @@
     "system/**": true,
     "third_party/**": true,
     "tools/**": true,
+    "opendbc_repo/**": true,
   },
   "python.analysis.exclude": [
     "**/.git",
@@ -33,6 +35,7 @@
     "system/**",
     "third_party/**",
     "tools/**",
+    "opendbc_repo/**",
   ],
   "files.associations": {
     "qpushbutton": "cpp",
