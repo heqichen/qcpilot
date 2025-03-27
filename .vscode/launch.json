@@ -41,6 +41,17 @@
       "request": "launch",
       "program": "${workspaceFolder}/${input:cpp_process}",
       "cwd": "${workspaceFolder}",
+    },
+    {
+      "name": "Python: fetch can message",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/poc/fetch_can.py",
+      "console": "integratedTerminal",
+      "args": [],
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      }
     }
   ]
 }
