@@ -6,10 +6,11 @@
       "type": "pickString",
       "description": "Select the process to debug",
       "options": [
-        "selfdrive/controls/controlsd.py",
+        "openpilot/selfdrive/selfdrived/selfdrived.py",
+        "openpilot/selfdrive/controls/controlsd.py",
         "system/timed/timed.py",
         "tools/sim/run_bridge.py"
-      ]
+      ],
     },
     {
       "id": "cpp_process",
@@ -33,7 +34,12 @@
       "program": "${input:python_process}",
       "console": "integratedTerminal",
       "justMyCode": true,
-      "args": "${input:args}"
+      "args": "${input:args}",
+      "env": {
+        // "FINGERPRINT": "MOCK",
+        // "SKIP_FW_QUERY": "true",
+        "PYTHONPATH": "${workspaceFolder}"
+      }
     },
     {
       "name": "C++: openpilot Process",
@@ -42,16 +48,5 @@
       "program": "${workspaceFolder}/${input:cpp_process}",
       "cwd": "${workspaceFolder}",
     },
-    {
-      "name": "Python: fetch can message",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/poc/fetch_can.py",
-      "console": "integratedTerminal",
-      "args": [],
-      "env": {
-        "PYTHONPATH": "${workspaceFolder}"
-      }
-    }
   ]
 }
