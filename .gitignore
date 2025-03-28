@@ -6,6 +6,10 @@ __pycache__
 *_pyx.cpp
 *_pyx.so
 
+# For qcpilot
+qcpilot/cufud/*.o
+qcpilot/cufud/cufud
+
 cereal/gen/**
 cereal/lib*.a
 cereal/messaging/*.o

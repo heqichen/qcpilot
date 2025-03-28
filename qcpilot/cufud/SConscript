@@ -1,0 +1,5 @@
+Import('env')
+
+src = ["cufud.cc"]
+
+env.Program("cufud", src, LIBS=[])

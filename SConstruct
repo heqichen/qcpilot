@@ -166,7 +166,7 @@ if ccflags_option:
 env = Environment(
   ENV=lenv,
   CCFLAGS=[
-    "-g",
+    # "-g",
     "-fPIC",
     "-O2",
     "-Wunused",
@@ -356,6 +356,7 @@ SConscript([
   'system/ubloxd/SConscript',
   'system/loggerd/SConscript',
 ])
+
 if arch != "Darwin":
   SConscript([
     'system/sensord/SConscript',
@@ -369,6 +370,8 @@ if arch == "larch64":
 SConscript(['third_party/SConscript'])
 
 SConscript(['selfdrive/SConscript'])
+
+SConscript('qcpilot/cufud/SConscript')
 
 SConscript(['tools/replay/SConscript'])
 SConscript(['tools/cabana/SConscript'])
