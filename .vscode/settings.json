@@ -93,10 +93,21 @@
     "streambuf": "cpp",
     "typeinfo": "cpp",
     "variant": "cpp",
-    "__nullptr": "cpp"
+    "__nullptr": "cpp",
+    "qfuture": "cpp",
+    "bitset": "cpp",
+    "complex": "cpp",
+    "set": "cpp",
+    "system_error": "cpp",
+    "iostream": "cpp",
+    "istream": "cpp",
+    "stop_token": "cpp",
+    "thread": "cpp"
   },
   "terminal.integrated.env.linux": {
     "PYTHONPATH": "${workspaceFolder}"
   },
-  "python.defaultInterpreterPath": "/home/heqichen/projects/openpilot/venv/bin/python"
+  "python.defaultInterpreterPath": "/home/heqichen/projects/openpilot/venv/bin/python",
+  "workbench.editor.wrapTabs": true,
+  "editor.formatOnSave": true
 }
