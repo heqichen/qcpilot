@@ -40,8 +40,8 @@ class RateKeeper {
 
                 capnp::FlatArrayMessageReader msgReader(aligned_buf.align(msg.get()));
                 cereal::Event::Reader event = msgReader.getRoot<cereal::Event>();
-                auto carState               = event.getCarState();
-                float v                     = carState.getVEgo();
+                auto carState = event.getCarState();
+                float v = carState.getVEgo();
                 std::printf("v: %f\r\n", v);
             } else {
                 // std::printf("nohing?");
