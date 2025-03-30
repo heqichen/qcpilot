@@ -17,7 +17,7 @@
       "type": "pickString",
       "description": "Select the process to debug",
       "options": [
-        "selfdrive/ui/ui"
+        "selfdrive/ui/ui",
       ]
     },
     {
@@ -48,5 +48,13 @@
       "program": "${workspaceFolder}/${input:cpp_process}",
       "cwd": "${workspaceFolder}",
     },
+    {
+      "name": "CuFuD",
+      "type": "lldb",
+      "request": "launch",
+      "program": "openpilot/qcpilot/cufud/cufud",
+      "stopOnEntry": false,
+      "cwd": "${workspaceFolder}"
+    }
   ]
 }

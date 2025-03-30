@@ -102,12 +102,15 @@
     "iostream": "cpp",
     "istream": "cpp",
     "stop_token": "cpp",
-    "thread": "cpp"
+    "thread": "cpp",
+    "future": "cpp",
+    "cassert": "cpp"
   },
   "terminal.integrated.env.linux": {
     "PYTHONPATH": "${workspaceFolder}"
   },
   "python.defaultInterpreterPath": "/home/heqichen/projects/openpilot/venv/bin/python",
   "workbench.editor.wrapTabs": true,
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "terminal.integrated.rightClickBehavior": "default"
 }
