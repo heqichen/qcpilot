@@ -3,7 +3,7 @@
 
 #include <optional>
 #include "cereal/messaging/messaging.h"
-#include "qcpilot/cufud/evaluators/evaluator.h"
+#include "openpilot/qcpilot/cufud/evaluators/evaluator.h"
 
 
 namespace qcpilot {
@@ -16,11 +16,7 @@ class CanValidEvaluator : public Evaluator {
         carStateReaderOpt_ {carStateReaderOpt} {}
 
     inline virtual void update() override {
-        if (carStateReaderOpt_.has_value()) {
-            isSatisfied_ = carStateReaderOpt_->getCanValid();
-        } else {
-            isSatisfied_ = false;
-        }
+        isSatisfied_ = carStateReaderOpt_.has_value() && carStateReaderOpt_->getCanValid();
     }
 
 

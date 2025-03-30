@@ -1,4 +1,4 @@
-#include "qcpilot/cufud/cufud.h"
+#include "openpilot/qcpilot/cufud/cufud.h"
 #include <cassert>
 #include <cstdint>
 #include <cstdio>
@@ -30,13 +30,17 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
       "selfdriveState",
       "longitudinalPlan",
     })},
-    carRecognizedEvaluator_ {carParams},
+    isCarRecognized_ {carParams.getBrand() != "mock"},
+    isOnCar_ {!carParams.getNotCar()},
+    // carRecognizedEvaluator_ {carParams},
     carSpeedEvaluator_ {carStateReaderOpt_},
-    canValidEvaluator_ {carStateReaderOpt_} {
+    canValidEvaluator_ {carStateReaderOpt_},
+    resourceEvaluator_ {deviceStateReaderOpt_} {
     assert(carStateSockPtr_ != nullptr);
     carStateSockPtr_->setTimeout(20);
     assert(subMasterPtr_ != nullptr);
     carStateReaderOpt_.reset();
+    deviceStateReaderOpt_.reset();
 }
 
 void CuFuD::step() {
@@ -49,6 +53,7 @@ void CuFuD::step() {
 void CuFuD::updateInput() {
     // Clear previous input
     carStateReaderOpt_.reset();
+    deviceStateReaderOpt_.reset();
 
     // Wait/Block for carState
     std::unique_ptr<Message> msg {carStateSockPtr_->receive(false)};
@@ -57,24 +62,33 @@ void CuFuD::updateInput() {
         capnp::FlatArrayMessageReader msgReader(carStateBuf_.align(msg.get()));
         cereal::Event::Reader event = msgReader.getRoot<cereal::Event>();
         carStateReaderOpt_ = event.getCarState();
+
+        if (subMasterPtr_->updated("deviceState")) {
+            deviceStateReaderOpt_ = (*subMasterPtr_)["deviceState"].getDeviceState();
+        }
     }
 }
 
 void CuFuD::updateEvaluators() {
-    carRecognizedEvaluator_.update();
+    // carRecognizedEvaluator_.update();
     carSpeedEvaluator_.update();
+    canValidEvaluator_.update();
+    resourceEvaluator_.update();
 }
 
 void CuFuD::consolicateResult() {
     bool longitudinalEnabled = true;
-    longitudinalEnabled = carRecognizedEvaluator_.isSatisfied() &&
-                          carSpeedEvaluator_.isSatisfied() && canValidEvaluator_.isSatisfied();
+    longitudinalEnabled = isCarRecognized_ && isOnCar_ && carSpeedEvaluator_.isSatisfied() &&
+                          canValidEvaluator_.isSatisfied();
 
     std::printf("long: %d  ", longitudinalEnabled);
     std::vector<bool> evaresult;
-    evaresult.push_back(carRecognizedEvaluator_.isSatisfied());
+    // evaresult.push_back(carRecognizedEvaluator_.isSatisfied());
+    evaresult.push_back(isCarRecognized_);
+    evaresult.push_back(isOnCar_);
     evaresult.push_back(carSpeedEvaluator_.isSatisfied());
     evaresult.push_back(canValidEvaluator_.isSatisfied());
+    evaresult.push_back(resourceEvaluator_.isSatisfied());
     for (const bool b : evaresult) {
         std::printf("%d ", b);
     }

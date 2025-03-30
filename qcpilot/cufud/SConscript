@@ -4,6 +4,7 @@ evaluators_src = [
   "evaluators/car_recognized_evaluator.cpp",
   "evaluators/car_speed_evaluator.cpp",
   "evaluators/can_valid_evaluator.cpp",
+  "evaluators/resource_evaluator.cpp",
 ]
 
 src = ["main.cpp", "cufud.cpp"] + evaluators_src

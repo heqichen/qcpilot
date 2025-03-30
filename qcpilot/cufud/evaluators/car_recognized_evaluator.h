@@ -2,7 +2,7 @@
 #define __QCPILOT_CUFUD_EVALUATORS_CAR_RECOGNIZED_EVALUATOR_H__
 
 #include "cereal/messaging/messaging.h"
-#include "qcpilot/cufud/evaluators/evaluator.h"
+#include "openpilot/qcpilot/cufud/evaluators/evaluator.h"
 
 namespace qcpilot {
 namespace cufu {
