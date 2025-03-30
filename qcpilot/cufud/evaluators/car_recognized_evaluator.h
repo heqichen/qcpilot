@@ -2,22 +2,18 @@
 #define __QCPILOT_CUFUD_EVALUATORS_CAR_RECOGNIZED_EVALUATOR_H__
 
 #include "cereal/messaging/messaging.h"
-
+#include "qcpilot/cufud/evaluators/evaluator.h"
 
 namespace qcpilot {
 namespace cufu {
 namespace evaluators {
 
-
-class CarRecognizedEvaluator {
+class CarRecognizedEvaluator : public Evaluator {
   public:
-    CarRecognizedEvaluator(const cereal::CarParams::Reader &carParams);
-    bool isSatisfied() const {
-        return isSatisfied_;
+    CarRecognizedEvaluator(const cereal::CarParams::Reader &carParams) {
+        isSatisfied_ = carParams.getBrand() != "mock";
     }
-
-  private:
-    bool isSatisfied_ = false;
+    inline virtual void update() override {}
 };
 }    // namespace evaluators
 }    // namespace cufu

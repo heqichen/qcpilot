@@ -1,10 +1,14 @@
 #ifndef __QCPILOT_CUFUD_CUFUD_H__
 #define __QCPILOT_CUFUD_CUFUD_H__
 
+#include <array>
 #include <memory>
 #include <optional>
 #include "cereal/messaging/messaging.h"
+#include "qcpilot/cufud/evaluators/can_valid_evaluator.h"
 #include "qcpilot/cufud/evaluators/car_recognized_evaluator.h"
+#include "qcpilot/cufud/evaluators/car_speed_evaluator.h"
+#include "qcpilot/cufud/evaluators/evaluator.h"
 
 namespace qcpilot {
 namespace cufu {
@@ -13,11 +17,11 @@ class CuFuD {
   public:
     CuFuD(const cereal::CarParams::Reader &carParams);
     void step();
-    void foo();
 
   private:
     void updateInput();
     void updateEvaluators();
+    void consolicateResult();
 
     // const cereal::CarParams::Reader &carParams_;
 
@@ -28,7 +32,10 @@ class CuFuD {
 
     std::optional<cereal::CarState::Reader> carStateReaderOpt_;
 
+    // std::array<std::unique_ptr<evaluators::Evaluator>, 2U> evaluators_;
     evaluators::CarRecognizedEvaluator carRecognizedEvaluator_;
+    evaluators::CarSpeedEvaluator carSpeedEvaluator_;
+    evaluators::CanValidEvaluator canValidEvaluator_;
 };
 
 }    // namespace cufu

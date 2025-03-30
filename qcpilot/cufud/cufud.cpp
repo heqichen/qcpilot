@@ -30,7 +30,9 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
       "selfdriveState",
       "longitudinalPlan",
     })},
-    carRecognizedEvaluator_ {carParams} {
+    carRecognizedEvaluator_ {carParams},
+    carSpeedEvaluator_ {carStateReaderOpt_},
+    canValidEvaluator_ {carStateReaderOpt_} {
     assert(carStateSockPtr_ != nullptr);
     carStateSockPtr_->setTimeout(20);
     assert(subMasterPtr_ != nullptr);
@@ -39,14 +41,11 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
 
 void CuFuD::step() {
     updateInput();
-    foo();
+    updateEvaluators();
+    consolicateResult();
 }
 
-void CuFuD::foo() {
-    if (carStateReaderOpt_.has_value()) {
-        std::printf("v = %f\r\n", carStateReaderOpt_->getVEgo());
-    }
-}
+
 void CuFuD::updateInput() {
     // Clear previous input
     carStateReaderOpt_.reset();
@@ -61,62 +60,27 @@ void CuFuD::updateInput() {
     }
 }
 
-void CuFuD::updateEvaluators() {}
-
-void CuFuD() {
-    std::unique_ptr<Context> context(Context::create());
-    std::unique_ptr<SubSocket> carStateSock(SubSocket::create(context.get(), "carState"));
-    std::unique_ptr<SubMaster> sm {std::make_unique<SubMaster>(std::vector<const char *> {
-      "modelV2",
-      "controlsState",
-      "liveCalibration",
-      "radarState",
-      "deviceState",
-      "pandaStates",
-      "carParams",
-      "driverMonitoringState",
-      "carState",
-      "driverStateV2",
-      "wideRoadCameraState",
-      "managerState",
-      "selfdriveState",
-      "longitudinalPlan",
-    })};
-
-    assert(carStateSock != NULL);
-    carStateSock->setTimeout(20);
-    AlignedBuffer aligned_buf;    // this is where the actual data live in.
-
-    std::printf("ready to receive data\r\n");
-    cereal::CarState::Reader carState;
-    cereal::CarState::Reader lastCarState;
-    while (true) {
-        std::unique_ptr<Message> msg {carStateSock->receive(false)};
-        sm->update(0);
-        if (msg) {
-            capnp::FlatArrayMessageReader msgReader(aligned_buf.align(msg.get()));
-            cereal::Event::Reader event = msgReader.getRoot<cereal::Event>();
-
-            carState = event.getCarState();
-            // std::optional<cereal::CarState::Reader> rr;
-
-            // rr = carState;
-
-            float v = carState.getVEgo();
-            float lastV = lastCarState.getVEgo();
-            std::printf("%u, v: %f , last: %f\r\n", carState.totalSize().capCount, v, lastV);
-            lastCarState = carState;
-
-
-            if (sm->updated("pandaStates")) {
-                auto pandaStates = (*sm)["pandaStates"].getPandaStates();
-                if (pandaStates.size() > 0) {
-                    auto isallowed = pandaStates[0].getControlsAllowed();
-                    std::printf("is allow control: %d\r\n", isallowed);
-                }
-            }
-        }
-    }
+void CuFuD::updateEvaluators() {
+    carRecognizedEvaluator_.update();
+    carSpeedEvaluator_.update();
 }
+
+void CuFuD::consolicateResult() {
+    bool longitudinalEnabled = true;
+    longitudinalEnabled = carRecognizedEvaluator_.isSatisfied() &&
+                          carSpeedEvaluator_.isSatisfied() && canValidEvaluator_.isSatisfied();
+
+    std::printf("long: %d  ", longitudinalEnabled);
+    std::vector<bool> evaresult;
+    evaresult.push_back(carRecognizedEvaluator_.isSatisfied());
+    evaresult.push_back(carSpeedEvaluator_.isSatisfied());
+    evaresult.push_back(canValidEvaluator_.isSatisfied());
+    for (const bool b : evaresult) {
+        std::printf("%d ", b);
+    }
+    std::printf("\r\n");
+}
+
+
 }    // namespace cufu
 }    // namespace qcpilot
