@@ -1,5 +1,5 @@
 Import('env', 'common', 'messaging')
 
-src = ["main.cpp", "cufud.cpp"]
+src = ["main.cpp", "cufud.cpp", "evaluators/car_recognized_evaluator.cpp"]
 cufud_objs=env.Object(src)
 env.Program("cufud", cufud_objs, LIBS=[common, messaging, 'zmq'])

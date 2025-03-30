@@ -8,8 +8,10 @@
 
 
 namespace qcpilot {
+namespace cufu {
 
-CuFuD::CuFuD() :
+CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
+    // carParams_ {carParams},
     contextPtr_ {Context::create()},
     carStateSockPtr_ {SubSocket::create(contextPtr_.get(), "carState")},
     subMasterPtr_ {std::make_unique<SubMaster>(std::vector<const char *> {
@@ -27,7 +29,8 @@ CuFuD::CuFuD() :
       "managerState",
       "selfdriveState",
       "longitudinalPlan",
-    })} {
+    })},
+    carRecognizedEvaluator_ {carParams} {
     assert(carStateSockPtr_ != nullptr);
     carStateSockPtr_->setTimeout(20);
     assert(subMasterPtr_ != nullptr);
@@ -57,6 +60,8 @@ void CuFuD::updateInput() {
         carStateReaderOpt_ = event.getCarState();
     }
 }
+
+void CuFuD::updateEvaluators() {}
 
 void CuFuD() {
     std::unique_ptr<Context> context(Context::create());
@@ -110,19 +115,8 @@ void CuFuD() {
                     std::printf("is allow control: %d\r\n", isallowed);
                 }
             }
-
-        } else {
-            // std::printf("nohing?\n");
-            // timeout
         }
-
-        // std::printf("%lu\r\n", sm->frame);
     }
-
-
-    // std::unique_ptr<SubMaster> sm(SubMaster::c)
-
-    // carStateSock->
 }
-
+}    // namespace cufu
 }    // namespace qcpilot
