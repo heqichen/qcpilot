@@ -13,6 +13,7 @@
     "third_party/**": true,
     "tools/**": true,
     "opendbc_repo/**": true,
+    "qcpilot/**": true,
   },
   "files.exclude": {
     "**/.git": true,
@@ -24,6 +25,7 @@
     "third_party/**": true,
     "tools/**": true,
     "opendbc_repo/**": true,
+    "qcpilot/**": true,
   },
   "python.analysis.exclude": [
     "**/.git",
@@ -36,6 +38,7 @@
     "third_party/**",
     "tools/**",
     "opendbc_repo/**",
+    "qcpilot/**",
   ],
   "files.associations": {
     "qpushbutton": "cpp",
@@ -112,5 +115,5 @@
   "python.defaultInterpreterPath": "/home/heqichen/projects/openpilot/venv/bin/python",
   "workbench.editor.wrapTabs": true,
   "editor.formatOnSave": true,
-  "terminal.integrated.rightClickBehavior": "default"
+  "terminal.integrated.rightClickBehavior": "default",
 }

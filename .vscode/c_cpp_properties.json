@@ -36,7 +36,7 @@
         "-Wno-vla-cxx-extension",
         "-Wno-deprecated-declarations"
       ],
-      "intelliSenseMode": "linux-gcc-x64",
+      "intelliSenseMode": "linux-clang-x64",
       "includePath": [
         "${myIncludePath}"
       ],
