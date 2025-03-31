@@ -30,12 +30,16 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
       "selfdriveState",
       "longitudinalPlan",
     })},
-    isCarRecognized_ {carParams.getBrand() != "mock"},
-    isOnCar_ {!carParams.getNotCar()},
-    // carRecognizedEvaluator_ {carParams},
+    carRecognizedEvaluator_ {carParams.getBrand() != "mock"},
+    onCarEvaluator_ {!carParams.getNotCar()},
     carSpeedEvaluator_ {carStateReaderOpt_},
     canValidEvaluator_ {carStateReaderOpt_},
-    resourceEvaluator_ {deviceStateReaderOpt_} {
+    resourceEvaluator_ {deviceStateReaderOpt_},
+    evaluators_ {&carRecognizedEvaluator_,
+                 &onCarEvaluator_,
+                 &carSpeedEvaluator_,
+                 &canValidEvaluator_,
+                 &resourceEvaluator_} {
     assert(carStateSockPtr_ != nullptr);
     carStateSockPtr_->setTimeout(20);
     assert(subMasterPtr_ != nullptr);
@@ -70,22 +74,20 @@ void CuFuD::updateInput() {
 }
 
 void CuFuD::updateEvaluators() {
-    // carRecognizedEvaluator_.update();
-    carSpeedEvaluator_.update();
-    canValidEvaluator_.update();
-    resourceEvaluator_.update();
+    for (auto &evaluator : evaluators_) {
+        evaluator->update();
+    }
 }
 
 void CuFuD::consolicateResult() {
     bool longitudinalEnabled = true;
-    longitudinalEnabled = isCarRecognized_ && isOnCar_ && carSpeedEvaluator_.isSatisfied() &&
-                          canValidEvaluator_.isSatisfied();
+    longitudinalEnabled = carRecognizedEvaluator_.isSatisfied() && onCarEvaluator_.isSatisfied() &&
+                          carSpeedEvaluator_.isSatisfied() && canValidEvaluator_.isSatisfied();
 
     std::printf("long: %d  ", longitudinalEnabled);
     std::vector<bool> evaresult;
-    // evaresult.push_back(carRecognizedEvaluator_.isSatisfied());
-    evaresult.push_back(isCarRecognized_);
-    evaresult.push_back(isOnCar_);
+    evaresult.push_back(carRecognizedEvaluator_.isSatisfied());
+    evaresult.push_back(onCarEvaluator_.isSatisfied());
     evaresult.push_back(carSpeedEvaluator_.isSatisfied());
     evaresult.push_back(canValidEvaluator_.isSatisfied());
     evaresult.push_back(resourceEvaluator_.isSatisfied());

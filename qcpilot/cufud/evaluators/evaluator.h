@@ -7,6 +7,7 @@ namespace qcpilot {
 namespace cufu {
 namespace evaluators {
 
+
 class Evaluator {
   protected:
     Evaluator() : isSatisfied_ {false} {}

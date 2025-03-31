@@ -4,10 +4,12 @@
 #include <array>
 #include <memory>
 #include <optional>
+#include <tuple>
 #include "cereal/messaging/messaging.h"
 #include "openpilot/qcpilot/cufud/evaluators/can_valid_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/car_recognized_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/car_speed_evaluator.h"
+#include "openpilot/qcpilot/cufud/evaluators/const_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/resource_evaluator.h"
 
@@ -34,13 +36,12 @@ class CuFuD {
     std::optional<cereal::CarState::Reader> carStateReaderOpt_;
     std::optional<cereal::DeviceState::Reader> deviceStateReaderOpt_;
 
-    const bool isCarRecognized_ = false;
-    const bool isOnCar_ = false;
-    // std::array<std::unique_ptr<evaluators::Evaluator>, 2U> evaluators_;
-    // evaluators::CarRecognizedEvaluator carRecognizedEvaluator_;
+    evaluators::ConstEvaluator carRecognizedEvaluator_;
+    evaluators::ConstEvaluator onCarEvaluator_;
     evaluators::CarSpeedEvaluator carSpeedEvaluator_;
     evaluators::CanValidEvaluator canValidEvaluator_;
     evaluators::ResourceEvaluator resourceEvaluator_;
+    std::array<evaluators::Evaluator *, 5U> evaluators_;
 };
 
 }    // namespace cufu
