@@ -20,10 +20,12 @@ class PandaSafetyConfigEvaluator : public Evaluator {
         carParams_ {carParams},
         pandaStatesReaderOpt_ {pandaStatesReaderOpt},
         safetyConfigMatched_ {false},
-        safetyConfigMismatchCount_ {0U} {}
+        safetyConfigMismatchCount_ {0U},
+        signalLostCount_ {0U} {}
 
     inline virtual void update() override {
         if (pandaStatesReaderOpt_.has_value()) {
+            signalLostCount_ = 0U;
             std::size_t pandaSefetyConfigLen = pandaStatesReaderOpt_->size();
             std::size_t carParamConfigLen = carParams_.getSafetyConfigs().size();
 
@@ -54,11 +56,15 @@ class PandaSafetyConfigEvaluator : public Evaluator {
             }
         }
         safetyConfigMismatchCount_++;
+        signalLostCount_++;
 
         if (!safetyConfigMatched_ && (safetyConfigMismatchCount_ >= 1000U)) {    // 10 Seconds
             isSatisfied_ = false;
         } else {
             isSatisfied_ = true;
+        }
+        if (signalLostCount_ > 200U) {
+            isSatisfied_ = false;
         }
     }
 
@@ -69,6 +75,7 @@ class PandaSafetyConfigEvaluator : public Evaluator {
 
     bool safetyConfigMatched_ = false;
     std::size_t safetyConfigMismatchCount_ = 0U;
+    std::size_t signalLostCount_ = 0U;
 };
 }    // namespace evaluators
 }    // namespace cufu
