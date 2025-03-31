@@ -60,7 +60,7 @@ class HardwareEvaluator : public Evaluator {
                         if (isFanStuck_) {
                             fanStuckCount_++;
                             // already stuck
-                            if (fanStuckCount_ > 250U) {    // 5 Seconds
+                            if (fanStuckCount_ > 500U) {    // 5 Seconds
                                 isSatisfied_ = false;
                             }
                         } else {

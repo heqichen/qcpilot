@@ -12,8 +12,8 @@
 #include "openpilot/qcpilot/cufud/evaluators/const_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/hardware_evaluator.h"
+#include "openpilot/qcpilot/cufud/evaluators/panda_safety_config_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/resource_evaluator.h"
-
 
 namespace qcpilot {
 namespace cufu {
@@ -26,11 +26,11 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
       "deviceState",
       "peripheralState",
       "liveCalibration",
+      "pandaStates",
 
       "modelV2",
       "controlsState",
       "radarState",
-      "pandaStates",
       "carParams",
       "driverMonitoringState",
       "carState",
@@ -45,22 +45,25 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
     carSpeedEvaluator_ {carStateReaderOpt_},
     canValidEvaluator_ {carStateReaderOpt_},
     resourceEvaluator_ {deviceStateReaderOpt_},
-    hardwareEvaluator_ {peripheralStateOpt_, deviceStateReaderOpt_},
-    calibratedEvaluator_ {liveCalibrationOpt_},
+    hardwareEvaluator_ {peripheralStateReaderOpt_, deviceStateReaderOpt_},
+    calibratedEvaluator_ {liveCalibrationReaderOpt_},
+    pandaSafetyConfigEvaluator_ {carParams, pandaStatesReaderOpt_},
     evaluators_ {&carRecognizedEvaluator_,
                  &onCarEvaluator_,
                  &carSpeedEvaluator_,
                  &canValidEvaluator_,
                  &resourceEvaluator_,
                  &hardwareEvaluator_,
-                 &calibratedEvaluator_} {
+                 &calibratedEvaluator_,
+                 &pandaSafetyConfigEvaluator_} {
     assert(carStateSockPtr_ != nullptr);
-    carStateSockPtr_->setTimeout(20);
+    carStateSockPtr_->setTimeout(20);    // CarState runs at 100Hz
     assert(subMasterPtr_ != nullptr);
     carStateReaderOpt_.reset();
     deviceStateReaderOpt_.reset();
-    peripheralStateOpt_.reset();
-    liveCalibrationOpt_.reset();
+    peripheralStateReaderOpt_.reset();
+    liveCalibrationReaderOpt_.reset();
+    pandaStatesReaderOpt_.reset();
 }
 
 void CuFuD::step() {
@@ -74,8 +77,9 @@ void CuFuD::updateInput() {
     // Clear previous input
     carStateReaderOpt_.reset();
     deviceStateReaderOpt_.reset();
-    peripheralStateOpt_.reset();
-    liveCalibrationOpt_.reset();
+    peripheralStateReaderOpt_.reset();
+    liveCalibrationReaderOpt_.reset();
+    pandaStatesReaderOpt_.reset();
 
     // Wait/Block for carState
     std::unique_ptr<Message> msg {carStateSockPtr_->receive(false)};
@@ -89,10 +93,13 @@ void CuFuD::updateInput() {
             deviceStateReaderOpt_ = (*subMasterPtr_)["deviceState"].getDeviceState();
         }
         if (subMasterPtr_->updated("peripheralState")) {
-            peripheralStateOpt_ = (*subMasterPtr_)["peripheralState"].getPeripheralState();
+            peripheralStateReaderOpt_ = (*subMasterPtr_)["peripheralState"].getPeripheralState();
         }
         if (subMasterPtr_->updated("liveCalibration")) {
-            liveCalibrationOpt_ = (*subMasterPtr_)["liveCalibration"].getLiveCalibration();
+            liveCalibrationReaderOpt_ = (*subMasterPtr_)["liveCalibration"].getLiveCalibration();
+        }
+        if (subMasterPtr_->updated("pandaStates")) {
+            pandaStatesReaderOpt_ = (*subMasterPtr_)["pandaStates"].getPandaStates();
         }
     }
 }
@@ -117,7 +124,7 @@ void CuFuD::consolidateResult() {
     for (const bool b : evaresult) {
         std::printf("%d ", b);
     }
-    std::printf("\r");
+    std::printf("\r\n");
 }
 
 
