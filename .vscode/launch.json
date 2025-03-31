@@ -50,11 +50,16 @@
     },
     {
       "name": "CuFuD",
-      "type": "lldb",
+      "type": "cppdbg",
       "request": "launch",
-      "program": "openpilot/qcpilot/cufud/cufud",
-      "stopOnEntry": false,
-      "cwd": "${workspaceFolder}"
+      "program": "${workspaceFolder}/openpilot/qcpilot/cufud/cufud",
+      "cwd": "${workspaceFolder}",
+      "setupCommands": [
+        {
+          "description": "ignore SIGUSR2 signal",
+          "text": "handle SIGUSR2 nostop noprint pass"
+        }
+      ],
     }
   ]
 }

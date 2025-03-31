@@ -116,4 +116,11 @@
   "workbench.editor.wrapTabs": true,
   "editor.formatOnSave": true,
   "terminal.integrated.rightClickBehavior": "default",
+  "C_Cpp.loggingLevel": "Debug",
+  "[python]": {
+    "editor.tabSize": 2
+  },
+  "[cpp]": {
+    "editor.tabSize": 4,
+  }
 }
