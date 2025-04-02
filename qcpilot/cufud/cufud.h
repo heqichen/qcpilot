@@ -6,6 +6,7 @@
 #include <optional>
 #include <tuple>
 #include "cereal/messaging/messaging.h"
+#include "openpilot/common/ratekeeper.h"
 #include "openpilot/qcpilot/cufud/evaluators/calibrated_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/can_valid_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/car_recognized_evaluator.h"
@@ -24,18 +25,20 @@ namespace cufu {
 class CuFuD {
   public:
     CuFuD(const cereal::CarParams::Reader &carParams);
-    void step();
+    void loop();
 
   private:
+    void step();
     void updateInput();
     void updateEvaluators();
     void consolidateResult();
 
     // const cereal::CarParams::Reader &carParams_;
-
+    RateKeeper rateKeeper_;
     bool isControllingEnabled_ {false};
     bool isSignalHealthy_ {false};
     bool isCameraHealthy_ {false};
+    bool isMyselfNotLagging_ {false};
 
     std::unique_ptr<Context> contextPtr_;
     std::unique_ptr<SubSocket> carStateSockPtr_;
@@ -61,8 +64,9 @@ class CuFuD {
     evaluators::ControlAllowedEvaluator controlAllowedEvaluator_;
     evaluators::EchoEvaluator signalHealthyEvaluator_;
     evaluators::EchoEvaluator cameraHealthyEvaluator_;
+    evaluators::EchoEvaluator realtimeEvaluator_;
 
-    std::array<evaluators::Evaluator *, 11U> evaluators_;
+    std::array<evaluators::Evaluator *, 12U> evaluators_;
 };
 
 }    // namespace cufu

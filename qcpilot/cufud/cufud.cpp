@@ -45,9 +45,11 @@ const std::vector<const char *> kCameraSingals = {
 
 CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
     // carParams_ {carParams},
+    rateKeeper_ {"cufud", 100},
     isControllingEnabled_ {false},
     isSignalHealthy_ {false},
     isCameraHealthy_ {false},
+    isMyselfNotLagging_ {false},
     contextPtr_ {Context::create()},
     carStateSockPtr_ {SubSocket::create(contextPtr_.get(), "carState")},
     subMasterPtr_ {std::make_unique<SubMaster>(kBasicSignals)},
@@ -63,6 +65,7 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
     controlAllowedEvaluator_ {isControllingEnabled_, pandaStatesReaderOpt_},
     signalHealthyEvaluator_ {isSignalHealthy_},
     cameraHealthyEvaluator_ {isCameraHealthy_},
+    realtimeEvaluator_ {isMyselfNotLagging_},
     evaluators_ {&carRecognizedEvaluator_,
                  &onCarEvaluator_,
                  &carSpeedEvaluator_,
@@ -73,7 +76,8 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
                  &pandaSafetyConfigEvaluator_,
                  &controlAllowedEvaluator_,
                  &signalHealthyEvaluator_,
-                 &cameraHealthyEvaluator_} {
+                 &cameraHealthyEvaluator_,
+                 &realtimeEvaluator_} {
     assert(carStateSockPtr_ != nullptr);
     carStateSockPtr_->setTimeout(20);    // CarState runs at 100Hz
     assert(subMasterPtr_ != nullptr);
@@ -83,6 +87,14 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
     peripheralStateReaderOpt_.reset();
     liveCalibrationReaderOpt_.reset();
     pandaStatesReaderOpt_.reset();
+}
+
+void CuFuD::loop() {
+    while (true) {
+        step();
+        // No need to keep time, just monitor time. Becuase read block by carState
+        isMyselfNotLagging_ = !rateKeeper_.monitorTime();
+    }
 }
 
 void CuFuD::step() {
@@ -122,10 +134,9 @@ void CuFuD::updateInput() {
             pandaStatesReaderOpt_ = (*subMasterPtr_)["pandaStates"].getPandaStates();
         }
     }
-}
 
-void CuFuD::updateEvaluators() {
     isSignalHealthy_ = subMasterPtr_->allAliveAndValid();
+
     // if (!isSignalHealthy_) {
     //     for (const char *signalName : kBasicSignals) {
     //         if (!subMasterPtr_->alive(signalName)) {
@@ -137,6 +148,9 @@ void CuFuD::updateEvaluators() {
     //     }
     // }
     isCameraHealthy_ = subMasterCameraPtr_->allAliveAndValid();
+}
+
+void CuFuD::updateEvaluators() {
     for (auto &evaluator : evaluators_) {
         evaluator->update();
     }

@@ -22,8 +22,7 @@ int main(int argc, char *argv[], char *envs[]) {
 
     qcpilot::cufu::CuFuD cuFuD(carParamsReader);
 
-    while (true) {
-        cuFuD.step();
-    }
+    cuFuD.loop();
+
     return 0;
 }
