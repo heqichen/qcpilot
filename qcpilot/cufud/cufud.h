@@ -35,11 +35,13 @@ class CuFuD {
 
     bool isControllingEnabled_ {false};
     bool isSignalHealthy_ {false};
+    bool isCameraHealthy_ {false};
 
     std::unique_ptr<Context> contextPtr_;
     std::unique_ptr<SubSocket> carStateSockPtr_;
     AlignedBuffer carStateBuf_;
     std::unique_ptr<SubMaster> subMasterPtr_;
+    std::unique_ptr<SubMaster> subMasterCameraPtr_;
 
     std::optional<cereal::CarState::Reader> carStateReaderOpt_;
     std::optional<cereal::DeviceState::Reader> deviceStateReaderOpt_;
@@ -58,8 +60,9 @@ class CuFuD {
     evaluators::PandaSafetyConfigEvaluator pandaSafetyConfigEvaluator_;
     evaluators::ControlAllowedEvaluator controlAllowedEvaluator_;
     evaluators::EchoEvaluator signalHealthyEvaluator_;
+    evaluators::EchoEvaluator cameraHealthyEvaluator_;
 
-    std::array<evaluators::Evaluator *, 10U> evaluators_;
+    std::array<evaluators::Evaluator *, 11U> evaluators_;
 };
 
 }    // namespace cufu
