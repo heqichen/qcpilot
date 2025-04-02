@@ -11,10 +11,13 @@
 #include "openpilot/qcpilot/cufud/evaluators/car_recognized_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/car_speed_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/const_evaluator.h"
+#include "openpilot/qcpilot/cufud/evaluators/control_allowed_evaluator.h"
+#include "openpilot/qcpilot/cufud/evaluators/echo_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/hardware_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/panda_safety_config_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/resource_evaluator.h"
+
 namespace qcpilot {
 namespace cufu {
 
@@ -29,6 +32,9 @@ class CuFuD {
     void consolidateResult();
 
     // const cereal::CarParams::Reader &carParams_;
+
+    bool isControllingEnabled_ {false};
+    bool isSignalHealthy_ {false};
 
     std::unique_ptr<Context> contextPtr_;
     std::unique_ptr<SubSocket> carStateSockPtr_;
@@ -50,8 +56,10 @@ class CuFuD {
     evaluators::HardwareEvaluator hardwareEvaluator_;
     evaluators::CalibratedEvaluator calibratedEvaluator_;
     evaluators::PandaSafetyConfigEvaluator pandaSafetyConfigEvaluator_;
+    evaluators::ControlAllowedEvaluator controlAllowedEvaluator_;
+    evaluators::EchoEvaluator signalHealthyEvaluator_;
 
-    std::array<evaluators::Evaluator *, 8U> evaluators_;
+    std::array<evaluators::Evaluator *, 10U> evaluators_;
 };
 
 }    // namespace cufu

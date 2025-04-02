@@ -10,6 +10,8 @@
 #include "openpilot/qcpilot/cufud/evaluators/car_recognized_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/car_speed_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/const_evaluator.h"
+#include "openpilot/qcpilot/cufud/evaluators/control_allowed_evaluator.h"
+#include "openpilot/qcpilot/cufud/evaluators/echo_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/hardware_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/panda_safety_config_evaluator.h"
@@ -18,28 +20,33 @@
 namespace qcpilot {
 namespace cufu {
 
+
+const std::vector<const char *> kSignals = {
+  "deviceState",
+  "peripheralState",
+  "liveCalibration",
+  "pandaStates",
+
+  "modelV2",
+  "controlsState",
+  "radarState",
+  "carParams",
+  "driverMonitoringState",
+  "carState",
+  "driverStateV2",
+  "wideRoadCameraState",
+  "managerState",
+  "selfdriveState",
+  "longitudinalPlan",
+};
+
 CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
     // carParams_ {carParams},
+    isControllingEnabled_ {false},
+    isSignalHealthy_ {false},
     contextPtr_ {Context::create()},
     carStateSockPtr_ {SubSocket::create(contextPtr_.get(), "carState")},
-    subMasterPtr_ {std::make_unique<SubMaster>(std::vector<const char *> {
-      "deviceState",
-      "peripheralState",
-      "liveCalibration",
-      "pandaStates",
-
-      "modelV2",
-      "controlsState",
-      "radarState",
-      "carParams",
-      "driverMonitoringState",
-      "carState",
-      "driverStateV2",
-      "wideRoadCameraState",
-      "managerState",
-      "selfdriveState",
-      "longitudinalPlan",
-    })},
+    subMasterPtr_ {std::make_unique<SubMaster>(kSignals)},
     carRecognizedEvaluator_ {carParams.getBrand() != "mock"},
     onCarEvaluator_ {!carParams.getNotCar()},
     carSpeedEvaluator_ {carStateReaderOpt_},
@@ -48,6 +55,8 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
     hardwareEvaluator_ {peripheralStateReaderOpt_, deviceStateReaderOpt_},
     calibratedEvaluator_ {liveCalibrationReaderOpt_},
     pandaSafetyConfigEvaluator_ {carParams, pandaStatesReaderOpt_},
+    controlAllowedEvaluator_ {isControllingEnabled_, pandaStatesReaderOpt_},
+    signalHealthyEvaluator_ {isSignalHealthy_},
     evaluators_ {&carRecognizedEvaluator_,
                  &onCarEvaluator_,
                  &carSpeedEvaluator_,
@@ -55,7 +64,9 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
                  &resourceEvaluator_,
                  &hardwareEvaluator_,
                  &calibratedEvaluator_,
-                 &pandaSafetyConfigEvaluator_} {
+                 &pandaSafetyConfigEvaluator_,
+                 &controlAllowedEvaluator_,
+                 &signalHealthyEvaluator_} {
     assert(carStateSockPtr_ != nullptr);
     carStateSockPtr_->setTimeout(20);    // CarState runs at 100Hz
     assert(subMasterPtr_ != nullptr);
@@ -105,6 +116,17 @@ void CuFuD::updateInput() {
 }
 
 void CuFuD::updateEvaluators() {
+    isSignalHealthy_ = subMasterPtr_->allAliveAndValid();
+    if (!isSignalHealthy_) {
+        for (const char *signalName : kSignals) {
+            if (!subMasterPtr_->alive(signalName)) {
+                std::printf("%s not alive\r\n", signalName);
+            }
+            if (!subMasterPtr_->valid(signalName)) {
+                std::printf("%s not valid\r\n", signalName);
+            }
+        }
+    }
     for (auto &evaluator : evaluators_) {
         evaluator->update();
     }
@@ -124,7 +146,9 @@ void CuFuD::consolidateResult() {
     for (const bool b : evaresult) {
         std::printf("%d ", b);
     }
-    std::printf("\r\n");
+    std::printf("\r");
+
+    isControllingEnabled_ = longitudinalEnabled;
 }
 
 
