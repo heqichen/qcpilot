@@ -33,13 +33,11 @@ class ControlAllowedEvaluator : public Evaluator {
                     controlDisallowCount_ = 0U;
                 } else {
                     controlDisallowCount_++;
-                    if (controlDisallowCount_ >= 2U) {
-                        isSatisfied_ = false;
-                    }
+                    isSatisfied_ = controlDisallowCount_ <= 2U;
                 }
             } else {
                 // If not controlling, allowsControl always false
-                isSatisfied_ = arePandasAllowControl;
+                isSatisfied_ = true;
                 controlDisallowCount_ = 0U;
             }
         } else {
