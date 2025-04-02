@@ -17,6 +17,7 @@
 #include "openpilot/qcpilot/cufud/evaluators/evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/hardware_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/panda_safety_config_evaluator.h"
+#include "openpilot/qcpilot/cufud/evaluators/radar_state_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/resource_evaluator.h"
 
 namespace qcpilot {
@@ -52,6 +53,7 @@ class CuFuD {
     std::optional<cereal::LiveCalibrationData::Reader> liveCalibrationReaderOpt_;
     std::optional<capnp::List<cereal::PandaState, capnp::Kind::STRUCT>::Reader>
       pandaStatesReaderOpt_;
+    std::optional<cereal::RadarState::Reader> radarStateReaderOpt_;
 
     evaluators::ConstEvaluator carRecognizedEvaluator_;
     evaluators::ConstEvaluator onCarEvaluator_;
@@ -65,8 +67,9 @@ class CuFuD {
     evaluators::EchoEvaluator signalHealthyEvaluator_;
     evaluators::EchoEvaluator cameraHealthyEvaluator_;
     evaluators::EchoEvaluator realtimeEvaluator_;
+    evaluators::RadarStateEvaluator radarStateEvaluator_;
 
-    std::array<evaluators::Evaluator *, 12U> evaluators_;
+    std::array<evaluators::Evaluator *, 13U> evaluators_;
 };
 
 }    // namespace cufu

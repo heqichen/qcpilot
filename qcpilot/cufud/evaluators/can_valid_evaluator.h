@@ -16,7 +16,8 @@ class CanValidEvaluator : public Evaluator {
         carStateReaderOpt_ {carStateReaderOpt} {}
 
     inline virtual void update() override {
-        isSatisfied_ = carStateReaderOpt_.has_value() && carStateReaderOpt_->getCanValid();
+        isSatisfied_ = carStateReaderOpt_.has_value() && carStateReaderOpt_->getCanValid() &&
+                       (!carStateReaderOpt_->getCanTimeout());
     }
 
 

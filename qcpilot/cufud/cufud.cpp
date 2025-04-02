@@ -15,6 +15,7 @@
 #include "openpilot/qcpilot/cufud/evaluators/evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/hardware_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/panda_safety_config_evaluator.h"
+#include "openpilot/qcpilot/cufud/evaluators/radar_state_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/resource_evaluator.h"
 
 namespace qcpilot {
@@ -66,6 +67,7 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
     signalHealthyEvaluator_ {isSignalHealthy_},
     cameraHealthyEvaluator_ {isCameraHealthy_},
     realtimeEvaluator_ {isMyselfNotLagging_},
+    radarStateEvaluator_ {radarStateReaderOpt_},
     evaluators_ {&carRecognizedEvaluator_,
                  &onCarEvaluator_,
                  &carSpeedEvaluator_,
@@ -77,7 +79,8 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
                  &controlAllowedEvaluator_,
                  &signalHealthyEvaluator_,
                  &cameraHealthyEvaluator_,
-                 &realtimeEvaluator_} {
+                 &realtimeEvaluator_,
+                 &radarStateEvaluator_} {
     assert(carStateSockPtr_ != nullptr);
     carStateSockPtr_->setTimeout(20);    // CarState runs at 100Hz
     assert(subMasterPtr_ != nullptr);
@@ -87,6 +90,7 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
     peripheralStateReaderOpt_.reset();
     liveCalibrationReaderOpt_.reset();
     pandaStatesReaderOpt_.reset();
+    radarStateReaderOpt_.reset();
 }
 
 void CuFuD::loop() {
@@ -111,6 +115,7 @@ void CuFuD::updateInput() {
     peripheralStateReaderOpt_.reset();
     liveCalibrationReaderOpt_.reset();
     pandaStatesReaderOpt_.reset();
+    radarStateReaderOpt_.reset();
 
     // Wait/Block for carState
     std::unique_ptr<Message> msg {carStateSockPtr_->receive(false)};
@@ -132,6 +137,9 @@ void CuFuD::updateInput() {
         }
         if (subMasterPtr_->updated("pandaStates")) {
             pandaStatesReaderOpt_ = (*subMasterPtr_)["pandaStates"].getPandaStates();
+        }
+        if (subMasterPtr_->updated("radarState")) {
+            radarStateReaderOpt_ = (*subMasterPtr_)["radarState"].getRadarState();
         }
     }
 
