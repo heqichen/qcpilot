@@ -40,6 +40,7 @@ class CuFuD {
     bool isControllingEnabled_ {false};
     bool isSignalHealthy_ {false};
     bool isCameraHealthy_ {false};
+    bool isSensorHealthy_ {false};
     bool isMyselfNotLagging_ {false};
 
     std::unique_ptr<Context> contextPtr_;
@@ -47,6 +48,7 @@ class CuFuD {
     AlignedBuffer carStateBuf_;
     std::unique_ptr<SubMaster> subMasterPtr_;
     std::unique_ptr<SubMaster> subMasterCameraPtr_;
+    std::unique_ptr<SubMaster> subMasterSensorPtr_;
 
     std::optional<cereal::CarState::Reader> carStateReaderOpt_;
     std::optional<cereal::DeviceState::Reader> deviceStateReaderOpt_;
@@ -71,9 +73,10 @@ class CuFuD {
     evaluators::EchoEvaluator realtimeEvaluator_;
     evaluators::RadarStateEvaluator radarStateEvaluator_;
     evaluators::PosenetEvaluator posenetEvaluator_;
+    evaluators::EchoEvaluator sensorHealthyEvaluator_;
 
 
-    std::array<evaluators::Evaluator *, 14U> evaluators_;
+    std::array<evaluators::Evaluator *, 15U> evaluators_;
 };
 
 }    // namespace cufu
