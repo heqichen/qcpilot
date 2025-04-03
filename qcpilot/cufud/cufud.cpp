@@ -198,6 +198,11 @@ void CuFuD::consolidateResult() {
     }
     std::printf("\r");
 
+    if (!isConditionSatisfied) {
+        // std::printf("not all condition satisfied\r\n\r\n");
+        std::printf("\n");
+    }
+
     isControllingEnabled_ = false;
 }
 
