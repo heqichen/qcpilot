@@ -18,14 +18,12 @@ class ControlAllowedEvaluator : public Evaluator {
         &pandaStatesReaderOpt) :
         isControlling_ {isControlling},
         pandaStatesReaderOpt_ {pandaStatesReaderOpt},
-        controlDisallowCount_ {0U},
-        signalLostCount_ {0U} {}
+        controlDisallowCount_ {0U} {}
 
     inline virtual void update() override {
         // 1. When controlling enabled, allow 2 frame controls allow failed
-        // 2. frame cannot missing
+        // 2. frame cannot missing, checked in other evaluators
         if (pandaStatesReaderOpt_.has_value()) {
-            signalLostCount_ = 0U;
             const bool arePandasAllowControl = allPandaControlAllowed();
             if (isControlling_) {
                 if (arePandasAllowControl) {
@@ -40,12 +38,6 @@ class ControlAllowedEvaluator : public Evaluator {
                 isSatisfied_ = true;
                 controlDisallowCount_ = 0U;
             }
-        } else {
-            signalLostCount_++;
-        }
-
-        if (signalLostCount_ > 20U) {    // PandaStates runs at 10Hz
-            isSatisfied_ = false;
         }
     }
 
@@ -55,7 +47,6 @@ class ControlAllowedEvaluator : public Evaluator {
       &pandaStatesReaderOpt_;
 
     std::size_t controlDisallowCount_ {0U};
-    std::size_t signalLostCount_ {0U};
 
     inline bool allPandaControlAllowed() {
         bool result = true;
