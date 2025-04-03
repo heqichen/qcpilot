@@ -7,6 +7,7 @@ evaluators_src = [
   "evaluators/const_evaluator.cpp",
   "evaluators/resource_evaluator.cpp",
   "evaluators/calibrated_evaluator.cpp",
+  "evaluators/posenet_evaluator.cpp"
 ]
 
 src = ["main.cpp", "cufud.cpp"] + evaluators_src
