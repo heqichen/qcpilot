@@ -16,6 +16,7 @@
 #include "openpilot/qcpilot/cufud/evaluators/echo_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/hardware_evaluator.h"
+#include "openpilot/qcpilot/cufud/evaluators/init_timeout_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/panda_safety_config_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/posenet_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/radar_state_evaluator.h"
@@ -61,6 +62,7 @@ class CuFuD {
 
     evaluators::ConstEvaluator carRecognizedEvaluator_;
     evaluators::ConstEvaluator onCarEvaluator_;
+    evaluators::InitTimeoutEvaluator initTimeoutEvaluator_;
     evaluators::CarSpeedEvaluator carSpeedEvaluator_;
     evaluators::CanValidEvaluator canValidEvaluator_;
     evaluators::ResourceEvaluator resourceEvaluator_;
@@ -76,7 +78,7 @@ class CuFuD {
     evaluators::EchoEvaluator sensorHealthyEvaluator_;
 
 
-    std::array<evaluators::Evaluator *, 15U> evaluators_;
+    std::array<evaluators::Evaluator *, 16U> evaluators_;
 };
 
 }    // namespace cufu

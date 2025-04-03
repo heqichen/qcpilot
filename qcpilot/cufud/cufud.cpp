@@ -14,6 +14,7 @@
 #include "openpilot/qcpilot/cufud/evaluators/echo_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/hardware_evaluator.h"
+#include "openpilot/qcpilot/cufud/evaluators/init_timeout_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/panda_safety_config_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/posenet_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/radar_state_evaluator.h"
@@ -63,6 +64,7 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
     subMasterSensorPtr_ {std::make_unique<SubMaster>(kSensorSingals)},
     carRecognizedEvaluator_ {carParams.getBrand() != "mock"},
     onCarEvaluator_ {!carParams.getNotCar()},
+    initTimeoutEvaluator_ {carStateReaderOpt_},
     carSpeedEvaluator_ {carStateReaderOpt_},
     canValidEvaluator_ {carStateReaderOpt_},
     resourceEvaluator_ {deviceStateReaderOpt_},
@@ -78,6 +80,7 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
     sensorHealthyEvaluator_ {isSensorHealthy_},
     evaluators_ {&carRecognizedEvaluator_,
                  &onCarEvaluator_,
+                 &initTimeoutEvaluator_,
                  &carSpeedEvaluator_,
                  &canValidEvaluator_,
                  &resourceEvaluator_,
