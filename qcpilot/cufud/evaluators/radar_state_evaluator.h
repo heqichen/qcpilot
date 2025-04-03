@@ -17,7 +17,11 @@ class RadarStateEvaluator : public Evaluator {
 
     inline virtual void update() override {
         if (radarStateReaderOpt_.has_value()) {
-            isSatisfied_ = !radarStateReaderOpt_->hasRadarErrors();
+            const bool hasError =
+              radarStateReaderOpt_->getRadarErrors().getRadarUnavailableTemporary() ||
+              radarStateReaderOpt_->getRadarErrors().getCanError() ||
+              radarStateReaderOpt_->getRadarErrors().getRadarFault();
+            isSatisfied_ = !hasError;
         }
     }
 
