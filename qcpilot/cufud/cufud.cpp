@@ -165,12 +165,12 @@ void CuFuD::updateEvaluators() {
 }
 
 void CuFuD::consolidateResult() {
-    bool longitudinalEnabled = true;
+    bool isConditionSatisfied = true;
     for (const auto &evaluator : evaluators_) {
-        longitudinalEnabled &= evaluator->isSatisfied();
+        isConditionSatisfied &= evaluator->isSatisfied();
     }
 
-    std::printf("long: %d  ", longitudinalEnabled);
+    std::printf("long: %d  ", isConditionSatisfied);
     std::vector<bool> evaresult;
     for (auto &evaluator : evaluators_) {
         evaresult.push_back(evaluator->isSatisfied());
@@ -180,7 +180,7 @@ void CuFuD::consolidateResult() {
     }
     std::printf("\r");
 
-    isControllingEnabled_ = longitudinalEnabled;
+    isControllingEnabled_ = false;
 }
 
 
