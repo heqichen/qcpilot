@@ -112,7 +112,7 @@
   "terminal.integrated.env.linux": {
     "PYTHONPATH": "${workspaceFolder}"
   },
-  "python.defaultInterpreterPath": "/home/heqichen/projects/openpilot/venv/bin/python",
+  "python.defaultInterpreterPath": "/home/heqichen/workspace/openpilot/openpilot-qc",
   "workbench.editor.wrapTabs": true,
   "editor.formatOnSave": true,
   "terminal.integrated.rightClickBehavior": "default",
@@ -122,5 +122,13 @@
   },
   "[cpp]": {
     "editor.tabSize": 4,
-  }
+  },
+  "cSpell.words": [
+    "latcontrol",
+    "locationd",
+    "longcontrol",
+    "opendbc",
+    "openpilot",
+    "selfdrive"
+  ]
 }
