@@ -208,7 +208,7 @@ void CuFuD::consolidateResult() {
         std::printf("\n");
     }
 
-    isControllingEnabled_ = false;
+    isControllingEnabled_ = isConditionSatisfied;
 }
 
 void CuFuD::publishResult() {
