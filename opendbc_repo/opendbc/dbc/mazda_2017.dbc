@@ -142,9 +142,11 @@ BO_ 157 CRZ_BTNS: 8 XXX
  SG_ DISTANCE_MORE : 6|1@0+ (1,0) [0|1] "" XXX
  SG_ DISTANCE_LESS : 7|1@0+ (1,0) [0|1] "" XXX
  SG_ DISTANCE_LESS_INV : 8|1@0+ (1,0) [0|1] "" XXX
+ SG_ LKAS : 11|1@0+ (1,0) [0|1] "" XXX
  SG_ MODE_Y : 13|1@0+ (1,0) [0|1] "" XXX
  SG_ MODE_X : 14|1@0+ (1,0) [0|1] "" XXX
- SG_ BIT1 : 16|1@0+ (1,0) [0|1] "" XXX
+ SG_ MRCC : 15|1@0+ (1,0) [0|1] "" XXX
+ SG_ MRCC_INV : 16|1@0+ (1,0) [0|1] "" XXX
  SG_ CAN_OFF_INV : 17|1@0+ (1,0) [0|1] "" XXX
  SG_ CANCEL_INV : 18|1@0+ (1,0) [0|1] "" XXX
  SG_ RES_INV : 19|1@0+ (1,0) [0|1] "" XXX
