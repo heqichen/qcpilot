@@ -13,6 +13,7 @@ qcpilot/cufud/cufud
 cereal/gen/**
 cereal/lib*.a
 cereal/messaging/*.o
+cereal/services.h
 common/*.o
 common/lib*.a
 common/transformations/*.o
