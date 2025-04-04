@@ -10,7 +10,27 @@ $Cxx.namespace("cereal");
 # DO rename the structs
 # DON'T change the identifier (e.g. @0x81c2f05a394cf4af)
 
-struct CustomReserved0 @0x81c2f05a394cf4af {
+struct QcPilotCufuState @0x81c2f05a394cf4af {
+  isControlSatisfied @0 :Bool;
+  evaluators @1 :StateEvaluators;
+  struct StateEvaluators {
+    carRecognized @0 :Bool;
+    onCar @1 :Bool;
+    initTimeout @2 :Bool;
+    carSpeed @3 :Bool;
+    canValid @4 :Bool;
+    resource @5 :Bool;
+    hardware @6 :Bool;
+    calibrated @7 :Bool;
+    pandaSafetyConfig @8 :Bool;
+    controlAllowed @9 :Bool;
+    signalHealthy @10 :Bool;
+    cameraHealthy @11 :Bool;
+    realtime @12 :Bool;
+    radarState @13 :Bool;
+    posenet @14 :Bool;
+    sensorHealthy @15 :Bool;
+  }
 }
 
 struct CustomReserved1 @0xaedffd8f31e7b55d {
