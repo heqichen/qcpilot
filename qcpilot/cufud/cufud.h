@@ -35,6 +35,7 @@ class CuFuD {
     void updateInput();
     void updateEvaluators();
     void consolidateResult();
+    void publishResult();
 
     // const cereal::CarParams::Reader &carParams_;
     RateKeeper rateKeeper_;
@@ -50,6 +51,8 @@ class CuFuD {
     std::unique_ptr<SubMaster> subMasterPtr_;
     std::unique_ptr<SubMaster> subMasterCameraPtr_;
     std::unique_ptr<SubMaster> subMasterSensorPtr_;
+
+    PubMaster pubMaster_;
 
     std::optional<cereal::CarState::Reader> carStateReaderOpt_;
     std::optional<cereal::DeviceState::Reader> deviceStateReaderOpt_;

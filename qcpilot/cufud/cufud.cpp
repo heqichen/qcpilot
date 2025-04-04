@@ -62,6 +62,7 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
     subMasterPtr_ {std::make_unique<SubMaster>(kBasicSignals)},
     subMasterCameraPtr_ {std::make_unique<SubMaster>(kCameraSingals)},
     subMasterSensorPtr_ {std::make_unique<SubMaster>(kSensorSingals)},
+    pubMaster_ {{"qcPilotCufuState"}},
     carRecognizedEvaluator_ {carParams.getBrand() != "mock"},
     onCarEvaluator_ {!carParams.getNotCar()},
     initTimeoutEvaluator_ {carStateReaderOpt_},
@@ -120,6 +121,7 @@ void CuFuD::step() {
     updateInput();
     updateEvaluators();
     consolidateResult();
+    publishResult();
 }
 
 
@@ -209,6 +211,33 @@ void CuFuD::consolidateResult() {
     isControllingEnabled_ = false;
 }
 
+void CuFuD::publishResult() {
+    MessageBuilder message;
+    cereal::QcPilotCufuState::Builder qcPilotCufuStateBuilder {
+      message.initEvent().initQcPilotCufuState()};
+    cereal::QcPilotCufuState::StateEvaluators::Builder evaluatorsBuilder {
+      qcPilotCufuStateBuilder.initEvaluators()};
+
+    evaluatorsBuilder.setCarRecognized(carRecognizedEvaluator_.isSatisfied());
+    evaluatorsBuilder.setOnCar(onCarEvaluator_.isSatisfied());
+    evaluatorsBuilder.setInitTimeout(initTimeoutEvaluator_.isSatisfied());
+    evaluatorsBuilder.setCarSpeed(carSpeedEvaluator_.isSatisfied());
+    evaluatorsBuilder.setCanValid(canValidEvaluator_.isSatisfied());
+    evaluatorsBuilder.setResource(resourceEvaluator_.isSatisfied());
+    evaluatorsBuilder.setHardware(hardwareEvaluator_.isSatisfied());
+    evaluatorsBuilder.setCalibrated(calibratedEvaluator_.isSatisfied());
+    evaluatorsBuilder.setPandaSafetyConfig(pandaSafetyConfigEvaluator_.isSatisfied());
+    evaluatorsBuilder.setControlAllowed(controlAllowedEvaluator_.isSatisfied());
+    evaluatorsBuilder.setSignalHealthy(signalHealthyEvaluator_.isSatisfied());
+    evaluatorsBuilder.setCameraHealthy(cameraHealthyEvaluator_.isSatisfied());
+    evaluatorsBuilder.setRealtime(realtimeEvaluator_.isSatisfied());
+    evaluatorsBuilder.setRadarState(radarStateEvaluator_.isSatisfied());
+    evaluatorsBuilder.setPosenet(posenetEvaluator_.isSatisfied());
+    evaluatorsBuilder.setSensorHealthy(sensorHealthyEvaluator_.isSatisfied());
+
+    qcPilotCufuStateBuilder.setIsControlSatisfied(isControllingEnabled_);
+    pubMaster_.send("qcPilotCufuState", message);
+}
 
 }    // namespace cufu
 }    // namespace qcpilot
