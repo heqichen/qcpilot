@@ -107,7 +107,15 @@
     "stop_token": "cpp",
     "thread": "cpp",
     "future": "cpp",
-    "cassert": "cpp"
+    "cassert": "cpp",
+    "charconv": "cpp",
+    "clocale": "cpp",
+    "deque": "cpp",
+    "format": "cpp",
+    "iomanip": "cpp",
+    "numbers": "cpp",
+    "semaphore": "cpp",
+    "span": "cpp"
   },
   "terminal.integrated.env.linux": {
     "PYTHONPATH": "${workspaceFolder}"
@@ -130,6 +138,7 @@
     "longcontrol",
     "opendbc",
     "openpilot",
+    "Ratekeeper",
     "selfdrive"
   ]
 }
