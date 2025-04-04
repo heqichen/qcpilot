@@ -287,5 +287,5 @@ tools/cabana/utils/moc_util.o
 tools/cabana/utils/util.o
 tools/cabana/videowidget.o
 tools/plotjuggler/bin/
-tools/plotjuggler/tmpitsocveg.rlog
+tools/plotjuggler/tmp*.rlog
 
