@@ -103,7 +103,7 @@ class Controls:
     CC.enabled = self.sm['selfdriveState'].enabled
 
     latActive = self.sm['qcPilotCufuState'].isControlSatisfied if self.sm.updated['qcPilotCufuState'] else self.sm['selfdriveState'].active
-    print(latActive)
+    # print(latActive)
 
     # Check which actuators can be enabled
     standstill = abs(CS.vEgo) <= max(self.CP.minSteerSpeed, MIN_LATERAL_CONTROL_SPEED) or CS.standstill

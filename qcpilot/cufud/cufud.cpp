@@ -193,20 +193,20 @@ void CuFuD::consolidateResult() {
         isConditionSatisfied &= evaluator->isSatisfied();
     }
 
-    std::printf("long: %d  ", isConditionSatisfied);
-    std::vector<bool> evaresult;
-    for (auto &evaluator : evaluators_) {
-        evaresult.push_back(evaluator->isSatisfied());
-    }
-    for (const bool b : evaresult) {
-        std::printf("%d ", b);
-    }
-    std::printf("\r");
+    // std::printf("long: %d  ", isConditionSatisfied);
+    // std::vector<bool> evaresult;
+    // for (auto &evaluator : evaluators_) {
+    //     evaresult.push_back(evaluator->isSatisfied());
+    // }
+    // for (const bool b : evaresult) {
+    //     std::printf("%d ", b);
+    // }
+    // std::printf("\r");
 
-    if (!isConditionSatisfied) {
-        // std::printf("not all condition satisfied\r\n\r\n");
-        std::printf("\n");
-    }
+    // if (!isConditionSatisfied) {
+    //     // std::printf("not all condition satisfied\r\n\r\n");
+    //     std::printf("\n");
+    // }
 
     isControllingEnabled_ = isConditionSatisfied;
 }
