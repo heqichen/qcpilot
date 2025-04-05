@@ -14,7 +14,7 @@ int main(int argc, char *argv[], char *envs[]) {
         assert(ret == 0);
     }
     Params params_;
-    std::string carParamCap = params_.get("CarParams");
+    std::string carParamCap = params_.get("CarParams", true);
     assert(carParamCap.size() > 0);
     AlignedBuffer aligned_buf;
     capnp::FlatArrayMessageReader msg(aligned_buf.align(carParamCap.data(), carParamCap.size()));
