@@ -166,7 +166,7 @@ if ccflags_option:
 env = Environment(
   ENV=lenv,
   CCFLAGS=[
-    # "-g",
+    "-g",
     "-fPIC",
     "-O2",
     "-Wunused",
@@ -373,8 +373,8 @@ SConscript(['selfdrive/SConscript'])
 
 SConscript('qcpilot/cufud/SConscript')
 
-SConscript(['tools/replay/SConscript'])
-SConscript(['tools/cabana/SConscript'])
+# SConscript(['tools/replay/SConscript'])
+# SConscript(['tools/cabana/SConscript'])
 
 # if Dir('#tools/cabana/').exists() and GetOption('extras'):
 #   if arch != "larch64":
