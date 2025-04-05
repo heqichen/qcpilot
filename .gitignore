@@ -69,6 +69,16 @@ system/sensord/*.o
 system/ubloxd/generated/*.o
 system/ubloxd/*.o
 system/ubloxd/*.o
+system/camerad/camerad
+system/camerad/cameras/camera_common.o
+system/camerad/cameras/camera_qcom2.o
+system/camerad/cameras/cdm.o
+system/camerad/cameras/spectra.o
+system/camerad/main.o
+system/camerad/sensors/ar0231.o
+system/camerad/sensors/os04c10.o
+system/camerad/sensors/ox03c10.o
+
 third_party/kaitai/kaitaistream.o
 third_party/libkaitai.a
 third_party/qrcode/QrCode.o
