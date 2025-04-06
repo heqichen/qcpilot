@@ -41,6 +41,7 @@
     "qcpilot/**",
   ],
   "files.associations": {
+    "log": "log",
     "qpushbutton": "cpp",
     "optional": "cpp",
     "string": "cpp",
@@ -134,11 +135,15 @@
   "cSpell.words": [
     "Cufu",
     "latcontrol",
+    "Lkas",
     "locationd",
     "longcontrol",
     "opendbc",
     "openpilot",
+    "qcpilot",
     "Ratekeeper",
     "selfdrive"
-  ]
+  ],
+  "logFileHighlighter.enableProgressIndicator": true,
+  "logFileHighlighter.customPatterns": []
 }
