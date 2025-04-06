@@ -43,6 +43,8 @@ selfdrive/pandad/libcan_list_to_can_capnp.a
 selfdrive/pandad/pandad_api_impl.o
 third_party/json11/json11.o
 third_party/libjson11.a
+selfdrive/modeld/models/driving_policy.onnx
+selfdrive/modeld/models/driving_vision.onnx
 
 
 cereal/gen/cpp/*.capnp.h
