@@ -11,6 +11,7 @@
 #include "openpilot/qcpilot/cufud/evaluators/can_valid_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/car_recognized_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/car_speed_evaluator.h"
+#include "openpilot/qcpilot/cufud/evaluators/chassis_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/const_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/control_allowed_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/echo_evaluator.h"
@@ -79,9 +80,10 @@ class CuFuD {
     evaluators::RadarStateEvaluator radarStateEvaluator_;
     evaluators::PosenetEvaluator posenetEvaluator_;
     evaluators::EchoEvaluator sensorHealthyEvaluator_;
+    evaluators::ChassisEvaluator chassisEvaluator_;
 
 
-    std::array<evaluators::Evaluator *, 16U> evaluators_;
+    std::array<evaluators::Evaluator *, 17U> evaluators_;
 };
 
 }    // namespace cufu

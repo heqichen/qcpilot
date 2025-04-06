@@ -9,6 +9,7 @@
 #include "openpilot/qcpilot/cufud/evaluators/can_valid_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/car_recognized_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/car_speed_evaluator.h"
+#include "openpilot/qcpilot/cufud/evaluators/chassis_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/const_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/control_allowed_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/echo_evaluator.h"
@@ -79,6 +80,7 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
     radarStateEvaluator_ {radarStateReaderOpt_},
     posenetEvaluator_ {livePoseReaderOpt_},
     sensorHealthyEvaluator_ {isSensorHealthy_},
+    chassisEvaluator_ {carStateReaderOpt_},
     evaluators_ {&carRecognizedEvaluator_,
                  &onCarEvaluator_,
                  &initTimeoutEvaluator_,
@@ -94,7 +96,8 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
                  &realtimeEvaluator_,
                  &radarStateEvaluator_,
                  &posenetEvaluator_,
-                 &sensorHealthyEvaluator_} {
+                 &sensorHealthyEvaluator_,
+                 &chassisEvaluator_} {
     assert(carStateSockPtr_ != nullptr);
     carStateSockPtr_->setTimeout(20);    // CarState runs at 100Hz
     assert(subMasterPtr_ != nullptr);
@@ -234,6 +237,8 @@ void CuFuD::publishResult() {
     evaluatorsBuilder.setRadarState(radarStateEvaluator_.isSatisfied());
     evaluatorsBuilder.setPosenet(posenetEvaluator_.isSatisfied());
     evaluatorsBuilder.setSensorHealthy(sensorHealthyEvaluator_.isSatisfied());
+    evaluatorsBuilder.setChassis(chassisEvaluator_.isSatisfied());
+
 
     qcPilotCufuStateBuilder.setIsControlSatisfied(isControllingEnabled_);
     pubMaster_.send("qcPilotCufuState", message);

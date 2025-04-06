@@ -30,6 +30,7 @@ struct QcPilotCufuState @0x81c2f05a394cf4af {
     radarState @13 :Bool;
     posenet @14 :Bool;
     sensorHealthy @15 :Bool;
+    chassis @16: Bool;
   }
 }
 
