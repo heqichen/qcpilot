@@ -454,7 +454,8 @@ void pandad_run(std::vector<Panda *> &pandas) {
   std::thread send_thread(can_send_thread, pandas, fake_send);
 
   RateKeeper rk("pandad", 100);
-  SubMaster sm({"selfdriveState"});
+  // SubMaster sm({"selfdriveState"});
+  SubMaster sm({"qcPilotCufuState"});
   PubMaster pm({"can", "pandaStates", "peripheralState"});
   PandaSafety panda_safety(pandas);
   Panda *peripheral_panda = pandas[0];
@@ -472,8 +473,11 @@ void pandad_run(std::vector<Panda *> &pandas) {
     // Process panda state at 10 Hz
     if (rk.frame() % 10 == 0) {
       sm.update(0);
-      engaged = sm.allAliveAndValid({"selfdriveState"}) &&
-                sm["selfdriveState"].getSelfdriveState().getEnabled();
+      // engaged = sm.allAliveAndValid({"selfdriveState"}) &&
+      //           sm["selfdriveState"].getSelfdriveState().getEnabled();
+      engaged =
+          sm.allAliveAndValid({"qcPilotCufuSate"}) &&
+          sm["qcPilotCufuSate"].getQcPilotCufuState().getIsControlSatisfied();
       process_panda_state(pandas, &pm, engaged, spoofing_started);
       panda_safety.configureSafetyMode();
     }
