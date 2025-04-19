@@ -116,7 +116,8 @@
     "iomanip": "cpp",
     "numbers": "cpp",
     "semaphore": "cpp",
-    "span": "cpp"
+    "span": "cpp",
+    "can_declarations.h": "c"
   },
   "terminal.integrated.env.linux": {
     "PYTHONPATH": "${workspaceFolder}"

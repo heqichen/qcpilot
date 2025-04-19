@@ -15,7 +15,9 @@
       "${workspaceFolder}/third_party/json11",
       "${workspaceFolder}/third_party/linux/include",
       "${workspaceFolder}/third_party",
-      "${workspaceFolder}/msgq"
+      "${workspaceFolder}/msgq",
+      "${workspaceFolder}/opendbc_repo/opendbc/safety/board",
+      "${workspaceFolder}/opendbc_repo/opendbc/safety"
     ],
     "myDefines": []
   },
