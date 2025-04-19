@@ -29,6 +29,7 @@ ACTUATOR_FIELDS = tuple(car.CarControl.Actuators.schema.fields.keys())
 class Controls:
   def __init__(self) -> None:
     self.params = Params()
+    self.prevLatActive = False
     cloudlog.info("controlsd is waiting for CarParams")
     self.CP = messaging.log_from_bytes(self.params.get("CarParams", block=True), car.CarParams)
     cloudlog.info("controlsd got CarParams")
@@ -103,7 +104,13 @@ class Controls:
     CC.enabled = self.sm['selfdriveState'].enabled
 
     latActive = self.sm['qcPilotCufuState'].isControlSatisfied if self.sm.updated['qcPilotCufuState'] else self.sm['selfdriveState'].active
+    # latActive = self.sm['qcPilotCufuState'].isControlSatisfied if self.sm.updated['qcPilotCufuState'] else self.sm['selfdriveState'].active
     # print(latActive)
+
+    latActive = self.prevLatActive
+    if self.sm.updated['qcPilotCufuState']:
+      latActive = self.sm['qcPilotCufuState'].isControlSatisfied
+      self.prevLatActive = latActive
 
     # Check which actuators can be enabled
     standstill = abs(CS.vEgo) <= max(self.CP.minSteerSpeed, MIN_LATERAL_CONTROL_SPEED) or CS.standstill
