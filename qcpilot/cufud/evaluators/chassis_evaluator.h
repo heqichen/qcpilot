@@ -17,13 +17,19 @@ class ChassisEvaluator : public Evaluator {
 
     inline virtual void update() override {
         if (carStateReaderOpt_.has_value()) {
-            bool isCruiseAvailable = false;
-            if (carStateReaderOpt_->hasCruiseState()) {
-                // CRZ_AVAILABLE
-                isCruiseAvailable = carStateReaderOpt_->getCruiseState().getAvailable();
-            }
+            // bool isCruiseAvailable = false;
+            // if (carStateReaderOpt_->hasCruiseState()) {
+            //     // CRZ_AVAILABLE
+            //     auto reader = carStateReaderOpt_->getCruiseState();
+            //     std::printf("%lu\r\n", reader.totalSize().wordCount);
+
+            //     // isCruiseAvailable = (carStateReaderOpt_->getCruiseState()).getAvailable();
+            // }
+            // const bool isLkasBlocked = carStateReaderOpt_->getGenericToggle();
+            // isSatisfied_ = isCruiseAvailable && (!isLkasBlocked);
+
             const bool isLkasBlocked = carStateReaderOpt_->getGenericToggle();
-            isSatisfied_ = isCruiseAvailable && (!isLkasBlocked);
+            isSatisfied_ = !isLkasBlocked;
         }
     }
 
