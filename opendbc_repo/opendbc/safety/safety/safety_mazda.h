@@ -35,7 +35,8 @@ static void mazda_rx_hook(const CANPacket_t *to_push) {
     // enter controls on rising edge of ACC, exit controls on ACC off
     if (addr == MAZDA_CRZ_CTRL) {
       bool cruise_engaged = GET_BYTE(to_push, 0) & 0x8U;
-      pcm_cruise_check(cruise_engaged);
+      UNUSED(cruise_engaged);
+      pcm_cruise_check(true); // always make control allowed
     }
 
     if (addr == MAZDA_ENGINE_DATA) {
