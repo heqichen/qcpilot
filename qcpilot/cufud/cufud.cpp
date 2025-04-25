@@ -241,7 +241,7 @@ void CuFuD::consolidateResult() {
                        vehicleState_.data().adasState.isCruiseAvailable &&
                        lateralStateMachine_.isLateralActive();
 
-    std::printf("%d %d %d\r\n", isControllingEnabled_, isLongitudinalActive_, isLateralActive_);
+    // std::printf("%d %d %d\r\n", isControllingEnabled_, isLongitudinalActive_, isLateralActive_);
 }
 
 void CuFuD::publishResult() {
