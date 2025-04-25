@@ -12,6 +12,23 @@ struct MotionState {
     float speed {0.0F};    // m/s
 };
 
+struct AdasState {
+    bool isCruiseAvailable {false};
+    bool isCruiseActive {false};
+    bool isAccActive {false};
+};
+
+struct ButtonState {
+    bool cruiseButton {false};
+    bool lkasButton {false};
+};
+
+struct VehicleState {
+    struct MotionState motionState {};
+    struct AdasState adasState {};
+    struct ButtonState buttonState {};
+};
+
 template<typename T>
 class QualifiedData {
   public:

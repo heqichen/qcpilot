@@ -11,9 +11,12 @@ $Cxx.namespace("cereal");
 # DON'T change the identifier (e.g. @0x81c2f05a394cf4af)
 
 struct QcPilotCufuState @0x81c2f05a394cf4af {
-  isControlSatisfied @0:Bool;
-  vehicleState @1 :VehicleState;
-  evaluators @2 :StateEvaluators;
+  evaluators @0 :StateEvaluators;
+  isEngaged @1 :Bool;
+  isLongitudinalActive @2 :Bool;
+  isLateralActive @3 :Bool;
+
+
 
   struct StateEvaluators {
     carRecognized @0 :Bool;
@@ -35,13 +38,13 @@ struct QcPilotCufuState @0x81c2f05a394cf4af {
     chassis @16: Bool;
   }
 
-  enum VehicleState {
-    error @0;
-    disabled @1;
-    available @2;
-    hold @3;
-    active @4;
-  }
+#  enum VehicleState {
+#    error @0;
+#    disabled @1;
+#    available @2;
+#    hold @3;
+#    active @4;
+#  }
 }
 
 struct QcMazdaState @0xaedffd8f31e7b55d {
@@ -56,8 +59,11 @@ struct QcMazdaState @0xaedffd8f31e7b55d {
   isCruiseActive @6 : Bool;
   isAccActive @7: Bool;
 
+  cruiseButtonState @8 :Bool;
+  lkasButtonState @9 :Bool;
+
 # temp added
-  isLkasBlocked @8: Bool;
+  isLkasBlocked @10: Bool;
 }
 
 struct CustomReserved2 @0xf35cc4560bbf6ec2 {

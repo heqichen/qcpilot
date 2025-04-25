@@ -23,6 +23,7 @@
 #include "openpilot/qcpilot/cufud/evaluators/posenet_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/radar_state_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/resource_evaluator.h"
+#include "openpilot/qcpilot/cufud/lateral/lateral_state_machine.h"
 
 namespace qcpilot {
 namespace cufu {
@@ -34,24 +35,25 @@ class CuFuD {
     void loop();
 
   private:
-    using VehicleState = ::cereal::QcPilotCufuState::VehicleState;
-
     void preProcess();
     void step();
     void updateInput();
     void updateEvaluators();
+    void updateStateMachine();
     void consolidateResult();
     void publishResult();
 
     // const cereal::CarParams::Reader &carParams_;
     RateKeeper rateKeeper_;
-    bool isControllingEnabled_ {false};
     bool isSignalHealthy_ {false};
     bool isCameraHealthy_ {false};
     bool isSensorHealthy_ {false};
     bool isMyselfNotLagging_ {false};
-    VehicleState vehicleState_ {VehicleState::ERROR};
-    data::QualifiedData<data::MotionState> motionState_ {};
+    data::QualifiedData<data::VehicleState> vehicleState_ {};
+
+    bool isControllingEnabled_ {false};
+    bool isLongitudinalActive_ {false};
+    bool isLateralActive_ {false};
 
     std::unique_ptr<Context> contextPtr_;
     std::unique_ptr<SubSocket> mazdaStateSockPtr_;
@@ -92,6 +94,8 @@ class CuFuD {
 
 
     std::array<evaluators::Evaluator *, 17U> evaluators_;
+
+    LateralStateMachine lateralStateMachine_;
 };
 
 }    // namespace cufu

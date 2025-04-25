@@ -12,20 +12,19 @@ namespace evaluators {
 
 class CarSpeedEvaluator : public Evaluator {
   public:
-    CarSpeedEvaluator(const data::QualifiedData<data::MotionState> &motionState) :
-        motionState_ {motionState} {}
+    CarSpeedEvaluator(const data::QualifiedData<data::VehicleState> &vehicleState) :
+        vehicleState_ {vehicleState} {}
 
     inline virtual void update() override {
-        if (motionState_.isQualified()) {
-            isSatisfied_ = motionState_.data().speed > 0.1F;
+        if (vehicleState_.isQualified()) {
+            isSatisfied_ = vehicleState_.data().motionState.speed > 0.1F;
         } else {
             isSatisfied_ = false;
         }
     }
 
   private:
-    const data::QualifiedData<data::MotionState> &motionState_;
-    ;
+    const data::QualifiedData<data::VehicleState> &vehicleState_;
 };
 }    // namespace evaluators
 }    // namespace cufu

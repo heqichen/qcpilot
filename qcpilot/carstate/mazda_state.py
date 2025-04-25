@@ -23,6 +23,9 @@ def update_mazda_state(cp: CANParser):
     qcMazdaState.wheelSpeedRLKph = cp.vl["WHEEL_SPEEDS"]["RL"]
     qcMazdaState.wheelSpeedRRKph = cp.vl["WHEEL_SPEEDS"]["RR"]
 
+    qcMazdaState.cruiseButtonState = cp.vl["CRZ_BTNS"]["MRCC"] == 1
+    qcMazdaState.lkasButtonState = cp.vl["CRZ_BTNS"]["LKAS"] == 1
+
     # CRZ = KD + KL
     # KD = ACC
     # True if ACC is ready, but not work. speed is three dots
