@@ -58,6 +58,7 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
     isSensorHealthy_ {false},
     isMyselfNotLagging_ {false},
     vehicleState_ {VehicleState::ERROR},
+    motionState_ {},
     contextPtr_ {Context::create()},
     mazdaStateSockPtr_ {SubSocket::create(contextPtr_.get(), "qcMazdaState")},
     subMasterPtr_ {std::make_unique<SubMaster>(kBasicSignals)},
@@ -67,7 +68,7 @@ CuFuD::CuFuD(const cereal::CarParams::Reader &carParams) :
     carRecognizedEvaluator_ {carParams.getBrand() != "mock"},
     onCarEvaluator_ {!carParams.getNotCar()},
     initTimeoutEvaluator_ {carStateReaderOpt_},
-    carSpeedEvaluator_ {carStateReaderOpt_},
+    carSpeedEvaluator_ {motionState_},
     canValidEvaluator_ {carStateReaderOpt_},
     resourceEvaluator_ {deviceStateReaderOpt_},
     hardwareEvaluator_ {peripheralStateReaderOpt_, deviceStateReaderOpt_},
@@ -128,6 +129,15 @@ void CuFuD::step() {
     publishResult();
 }
 
+void CuFuD::preProcess() {
+    if (mazdaStateReaderOpt_.has_value()) {
+        motionState_.qualify();
+        motionState_.data().speed = mazdaStateReaderOpt_->getEngineSpeedKph() * data::KPH_TO_MPS;
+    } else {
+        motionState_.disqualify();
+    }
+}
+
 
 void CuFuD::updateInput() {
     // Clear previous input
@@ -150,6 +160,7 @@ void CuFuD::updateInput() {
         cereal::Event::Reader event = msgReader.getRoot<cereal::Event>();
         mazdaStateReaderOpt_ = event.getQcMazdaState();
 
+        preProcess();
         bool isCrzAvailable = mazdaStateReaderOpt_->getIsCruiseAvailable();
         bool isCruiseActive = mazdaStateReaderOpt_->getIsCruiseActive();
         bool isAccActive = mazdaStateReaderOpt_->getIsAccActive();

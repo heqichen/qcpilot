@@ -7,6 +7,7 @@
 #include <tuple>
 #include "cereal/messaging/messaging.h"
 #include "openpilot/common/ratekeeper.h"
+#include "openpilot/qcpilot/cufud/data/data.h"
 #include "openpilot/qcpilot/cufud/evaluators/calibrated_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/can_valid_evaluator.h"
 #include "openpilot/qcpilot/cufud/evaluators/car_recognized_evaluator.h"
@@ -26,6 +27,7 @@
 namespace qcpilot {
 namespace cufu {
 
+
 class CuFuD {
   public:
     CuFuD(const cereal::CarParams::Reader &carParams);
@@ -34,6 +36,7 @@ class CuFuD {
   private:
     using VehicleState = ::cereal::QcPilotCufuState::VehicleState;
 
+    void preProcess();
     void step();
     void updateInput();
     void updateEvaluators();
@@ -48,6 +51,7 @@ class CuFuD {
     bool isSensorHealthy_ {false};
     bool isMyselfNotLagging_ {false};
     VehicleState vehicleState_ {VehicleState::ERROR};
+    data::QualifiedData<data::MotionState> motionState_ {};
 
     std::unique_ptr<Context> contextPtr_;
     std::unique_ptr<SubSocket> mazdaStateSockPtr_;

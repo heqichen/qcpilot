@@ -3,6 +3,7 @@
 
 #include <optional>
 #include "cereal/messaging/messaging.h"
+#include "openpilot/qcpilot/cufud/data/data.h"
 #include "openpilot/qcpilot/cufud/evaluators/evaluator.h"
 
 namespace qcpilot {
@@ -11,19 +12,20 @@ namespace evaluators {
 
 class CarSpeedEvaluator : public Evaluator {
   public:
-    CarSpeedEvaluator(const std::optional<cereal::CarState::Reader> &carStateReaderOpt) :
-        carStateReaderOpt_ {carStateReaderOpt} {}
+    CarSpeedEvaluator(const data::QualifiedData<data::MotionState> &motionState) :
+        motionState_ {motionState} {}
 
     inline virtual void update() override {
-        if (carStateReaderOpt_.has_value()) {
-            isSatisfied_ = carStateReaderOpt_->getVEgo() > 0.3F;
+        if (motionState_.isQualified()) {
+            isSatisfied_ = motionState_.data().speed > 0.1F;
         } else {
             isSatisfied_ = false;
         }
     }
 
   private:
-    const std::optional<cereal::CarState::Reader> &carStateReaderOpt_;
+    const data::QualifiedData<data::MotionState> &motionState_;
+    ;
 };
 }    // namespace evaluators
 }    // namespace cufu
