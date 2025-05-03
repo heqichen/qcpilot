@@ -17,7 +17,7 @@ class Toohs {
 public:
   Toohs() {
     socketFd_ = socket(AF_INET, SOCK_DGRAM, 0);
-    if (socketFd_ == -1) {
+    if (socketFd_ < 0) {
       std::fprintf(stderr, "Cannot create socket\r\n");
       std::exit(-1);
     }
@@ -27,8 +27,18 @@ public:
     localAddr_.sin_addr.s_addr = htonl(INADDR_ANY);
     localAddr_.sin_port = htons(MCAST_PORT);
 
-    int err =
-        bind(socketFd_, (struct sockaddr *)&localAddr_, sizeof(localAddr_));
+    int err = 0;
+
+    // Allow multiple receivers
+    int yes = 1;
+    err = setsockopt(socketFd_, SOL_SOCKET, SO_REUSEADDR, (void *)&yes,
+                     sizeof(yes));
+    if (err < 0) {
+      std::fprintf(stderr, "Reuse Address failed\r\n");
+      std::exit(-2);
+    }
+
+    err = bind(socketFd_, (struct sockaddr *)&localAddr_, sizeof(localAddr_));
     if (err < 0) {
       std::fprintf(stderr, "Cannot bind socket\r\n");
       std::exit(-2);
