@@ -12,8 +12,6 @@
 
 #define MCAST_PORT 1900
 #define MCAST_ADDR "239.238.237.236"
-#define MCAST_DATA "Hello world???" /*多播發送的數據*/
-#define MCAST_INTERVAL 5            /*發送間隔時間*/
 
 class Shoot {
 public:
@@ -34,7 +32,7 @@ public:
 
   void send(const char *str) {
     const ssize_t sentSize =
-        sendto(socketFd_, str, std::strlen(str), 0,
+        sendto(socketFd_, str, std::strlen(str) + 1, 0,
                (struct sockaddr *)&mcastAddr_, sizeof(mcastAddr_));
     if (sentSize < 0) {
       std::fprintf(stderr, "Failed to send data\r\n");
@@ -47,13 +45,65 @@ private:
   struct sockaddr_in mcastAddr_ {};
 };
 
+class TcpShoot {
+public:
+  TcpShoot() {
+    bzero((char *)&servAddr_, sizeof(servAddr_));
+    servAddr_.sin_family = AF_INET;
+    servAddr_.sin_addr.s_addr = htonl(INADDR_ANY);
+    servAddr_.sin_port = htons(MCAST_PORT);
+
+    // open stream oriented socket with internet address
+    // also keep track of the socket descriptor
+    serverFd_ = socket(AF_INET, SOCK_STREAM, 0);
+    if (serverFd_ < 0) {
+      std::fprintf(stderr, "Error establishing the server socket\r\n");
+      std::exit(-1);
+    }
+
+    // bind the socket to its local address
+    int err = bind(serverFd_, (struct sockaddr *)&servAddr_, sizeof(servAddr_));
+    if (err < 0) {
+      std::fprintf(stderr, "Error binding socket to local address\r\n");
+      std::exit(-2);
+    }
+
+    if ((listen(serverFd_, 5)) != 0) {
+      std::fprintf(stderr, "Listen failed...\r\n");
+      exit(0);
+    }
+    std::printf("wait for client\r\n");
+  }
+
+  void send(const char *str) {
+    // if (clientFd_ < 0) {
+    //   // wait for client
+    //   acceptClient();
+    // }
+    sockaddr_in clientSockAddr;
+    socklen_t clientSockAddrSize = sizeof(clientSockAddr);
+    clientFd_ =
+        accept(serverFd_, (sockaddr *)&clientSockAddr, &clientSockAddrSize);
+    std::printf("client come\r\n");
+    write(clientFd_, str, strlen(str));
+    close(clientFd_);
+  }
+
+private:
+  struct sockaddr_in servAddr_ {};
+  int serverFd_{-1};
+  int clientFd_{-1};
+};
+
 int main(int argc, char *argv[], char **envs) {
   Shoot s{};
 
   while (true) {
-    std::string str;
-    std::cin >> str;
-    s.send(str.c_str());
+    usleep(10000);
+    // std::string str;
+    // std::cin >> str;
+    // s.send(str.c_str());
+    s.send("hdddddddello worlddddddddddddddddd\r\n");
   }
 
   return 0;
