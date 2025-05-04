@@ -49,7 +49,7 @@ struct QcPilotCufuState @0x81c2f05a394cf4af {
 
 struct QcMazdaState @0xaedffd8f31e7b55d {
   # Basic state
-  engineRpm @0: Float32;
+  engineRpm @0: UInt16;
   engineSpeedKph @1: Float32;
   wheelSpeedFLKph @2: Float32;
   wheelSpeedFRKph @3: Float32;
