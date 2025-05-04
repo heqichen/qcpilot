@@ -49,21 +49,22 @@ struct QcPilotCufuState @0x81c2f05a394cf4af {
 
 struct QcMazdaState @0xaedffd8f31e7b55d {
   # Basic state
-  engineSpeedKph @0: Float32;
-  wheelSpeedFLKph @1: Float32;
-  wheelSpeedFRKph @2: Float32;
-  wheelSpeedRLKph @3: Float32;
-  wheelSpeedRRKph @4: Float32;
+  engineRpm @0: Float32;
+  engineSpeedKph @1: Float32;
+  wheelSpeedFLKph @2: Float32;
+  wheelSpeedFRKph @3: Float32;
+  wheelSpeedRLKph @4: Float32;
+  wheelSpeedRRKph @5: Float32;
 
-  isCruiseAvailable @5 : Bool;
-  isCruiseActive @6 : Bool;
-  isAccActive @7: Bool;
+  isCruiseAvailable @6 : Bool;
+  isCruiseActive @7 : Bool;
+  isAccActive @8: Bool;
 
-  cruiseButtonState @8 :Bool;
-  lkasButtonState @9 :Bool;
+  cruiseButtonState @9 :Bool;
+  lkasButtonState @10 :Bool;
 
 # temp added
-  isLkasBlocked @10: Bool;
+  isLkasBlocked @11: Bool;
 }
 
 struct CustomReserved2 @0xf35cc4560bbf6ec2 {
