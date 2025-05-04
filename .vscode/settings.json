@@ -120,7 +120,8 @@
     "can_declarations.h": "c",
     "condition_variable": "cpp",
     "unordered_set": "cpp",
-    "cinttypes": "cpp"
+    "cinttypes": "cpp",
+    "fstream": "cpp"
   },
   "terminal.integrated.env.linux": {
     "PYTHONPATH": "${workspaceFolder}"
