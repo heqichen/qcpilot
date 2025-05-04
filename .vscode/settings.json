@@ -121,7 +121,8 @@
     "condition_variable": "cpp",
     "unordered_set": "cpp",
     "cinttypes": "cpp",
-    "fstream": "cpp"
+    "fstream": "cpp",
+    "regex": "cpp"
   },
   "terminal.integrated.env.linux": {
     "PYTHONPATH": "${workspaceFolder}"

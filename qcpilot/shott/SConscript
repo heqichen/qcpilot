@@ -1,4 +1,4 @@
-Import('env', 'common', 'messaging')
+Import('qc_env', 'common', 'messaging')
 
 # evaluators_src = [
 #   "evaluators/can_valid_evaluator.cpp",
@@ -10,6 +10,7 @@ Import('env', 'common', 'messaging')
 #   "evaluators/posenet_evaluator.cpp"
 # ]
 
+
 src = ["main.cpp", "shott.cpp"]  # + evaluators_src
-shott_objs = env.Object(src)
-env.Program("shott", shott_objs, LIBS=[common, messaging, 'zmq'])
+shott_objs = qc_env.Object(src)
+qc_env.Program("shott", shott_objs, LIBS=[common, messaging, 'zmq'], CPPPATH=["libs/cereal-1.3.2"])
