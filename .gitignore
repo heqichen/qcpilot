@@ -10,6 +10,9 @@ __pycache__
 # For qcpilot
 qcpilot/cufud/**/*.o
 qcpilot/cufud/cufud
+qcpilot/shott/main.o
+qcpilot/shott/shott
+
 
 cereal/gen/**
 cereal/lib*.a
