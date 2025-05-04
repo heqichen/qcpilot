@@ -10,6 +10,6 @@ Import('env', 'common', 'messaging')
 #   "evaluators/posenet_evaluator.cpp"
 # ]
 
-src = ["main.cpp"]  # + evaluators_src
+src = ["main.cpp", "shott.cpp"]  # + evaluators_src
 shott_objs = env.Object(src)
 env.Program("shott", shott_objs, LIBS=[common, messaging, 'zmq'])
