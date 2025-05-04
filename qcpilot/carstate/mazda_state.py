@@ -17,7 +17,7 @@ def update_mazda_state(cp: CANParser):
   global stateUpdated
   stateUpdated = True
 
-  qcMazdaState.engineRpm = cp.vl["ENGINE_DATA"]["RPM"]
+  qcMazdaState.engineRpm = int(cp.vl["ENGINE_DATA"]["RPM"])
   qcMazdaState.engineSpeedKph = cp.vl["ENGINE_DATA"]["SPEED"]
   qcMazdaState.wheelSpeedFLKph = cp.vl["WHEEL_SPEEDS"]["FL"]
   qcMazdaState.wheelSpeedFRKph = cp.vl["WHEEL_SPEEDS"]["FR"]
