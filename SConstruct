@@ -10,65 +10,42 @@ import SCons.Errors
 SCons.Warnings.warningAsException(True)
 
 # pending upstream fix - https://github.com/SCons/scons/issues/4461
-#SetOption('warn', 'all')
+# SetOption('warn', 'all')
 
 TICI = os.path.isfile('/TICI')
 AGNOS = TICI
 
 Decider('MD5-timestamp')
 
-SetOption('num_jobs', int(os.cpu_count()/2))
+SetOption('num_jobs', int(os.cpu_count() / 2))
 
-AddOption('--kaitai',
-          action='store_true',
-          help='Regenerate kaitai struct parsers')
+AddOption('--kaitai', action='store_true', help='Regenerate kaitai struct parsers')
 
-AddOption('--asan',
-          action='store_true',
-          help='turn on ASAN')
+AddOption('--asan', action='store_true', help='turn on ASAN')
 
-AddOption('--ubsan',
-          action='store_true',
-          help='turn on UBSan')
+AddOption('--ubsan', action='store_true', help='turn on UBSan')
 
-AddOption('--coverage',
-          action='store_true',
-          help='build with test coverage options')
+AddOption('--coverage', action='store_true', help='build with test coverage options')
 
-AddOption('--clazy',
-          action='store_true',
-          help='build with clazy')
+AddOption('--clazy', action='store_true', help='build with clazy')
 
-AddOption('--compile_db',
-          action='store_true',
-          help='build clang compilation database')
+AddOption('--compile_db', action='store_true', help='build clang compilation database')
 
-AddOption('--ccflags',
-          action='store',
-          type='string',
-          default='',
-          help='pass arbitrary flags over the command line')
+AddOption('--ccflags', action='store', type='string', default='', help='pass arbitrary flags over the command line')
 
-AddOption('--external-sconscript',
-          action='store',
-          metavar='FILE',
-          dest='external_sconscript',
-          help='add an external SConscript to the build')
+AddOption('--external-sconscript', action='store', metavar='FILE', dest='external_sconscript', help='add an external SConscript to the build')
 
-AddOption('--pc-thneed',
-          action='store_true',
-          dest='pc_thneed',
-          help='use thneed on pc')
+AddOption('--pc-thneed', action='store_true', dest='pc_thneed', help='use thneed on pc')
 
-AddOption('--mutation',
-          action='store_true',
-          help='generate mutation-ready code')
+AddOption('--mutation', action='store_true', help='generate mutation-ready code')
 
-AddOption('--minimal',
-          action='store_false',
-          dest='extras',
-          default=os.path.exists(File('#.lfsconfig').abspath), # minimal by default on release branch (where there's no LFS)
-          help='the minimum build to run openpilot. no tests, tools, etc.')
+AddOption(
+  '--minimal',
+  action='store_false',
+  dest='extras',
+  default=os.path.exists(File('#.lfsconfig').abspath),  # minimal by default on release branch (where there's no LFS)
+  help='the minimum build to run openpilot. no tests, tools, etc.',
+)
 
 ## Architecture name breakdown (arch)
 ## - larch64: linux tici aarch64
@@ -87,10 +64,9 @@ lenv = {
   "PATH": os.environ['PATH'],
   "LD_LIBRARY_PATH": [Dir(f"#third_party/acados/{arch}/lib").abspath],
   "PYTHONPATH": Dir("#").abspath + ':' + Dir(f"#third_party/acados").abspath,
-
   "ACADOS_SOURCE_DIR": Dir("#third_party/acados").abspath,
   "ACADOS_PYTHON_INTERFACE_PATH": Dir("#third_party/acados/acados_template").abspath,
-  "TERA_PATH": Dir("#").abspath + f"/third_party/acados/{arch}/t_renderer"
+  "TERA_PATH": Dir("#").abspath + f"/third_party/acados/{arch}/t_renderer",
 }
 
 rpath = lenv["LD_LIBRARY_PATH"].copy()
@@ -106,10 +82,7 @@ if arch == "larch64":
     f"#third_party/acados/{arch}/lib",
   ]
 
-  libpath += [
-    "#third_party/libyuv/larch64/lib",
-    "/usr/lib/aarch64-linux-gnu"
-  ]
+  libpath += ["#third_party/libyuv/larch64/lib", "/usr/lib/aarch64-linux-gnu"]
   cflags = ["-DQCOM2", "-mcpu=cortex-a57"]
   cxxflags = ["-DQCOM2", "-mcpu=cortex-a57"]
   rpath += ["/usr/local/lib"]
@@ -177,9 +150,11 @@ env = Environment(
     "-Wno-c99-designator",
     "-Wno-reorder-init-list",
     "-Wno-vla-cxx-extension",
-  ] + cflags + ccflags,
-
-  CPPPATH=cpppath + [
+  ]
+  + cflags
+  + ccflags,
+  CPPPATH=cpppath
+  + [
     "#",
     "#third_party/acados/include",
     "#third_party/acados/include/blasfeo/include",
@@ -191,16 +166,14 @@ env = Environment(
     "#third_party",
     "#msgq",
   ],
-
   CC='clang',
   CXX='clang++',
   LINKFLAGS=ldflags,
-
   RPATH=rpath,
-
   CFLAGS=["-std=gnu11"] + cflags,
   CXXFLAGS=["-std=c++1z"] + cxxflags,
-  LIBPATH=libpath + [
+  LIBPATH=libpath
+  + [
     "#msgq_repo",
     "#third_party",
     "#selfdrive/pandad",
@@ -229,10 +202,13 @@ Clean(["."], cache_dir)
 
 node_interval = 5
 node_count = 0
+
+
 def progress_function(node):
   global node_count
   node_count += node_interval
   sys.stderr.write("progress: %d\n" % node_count)
+
 
 if os.environ.get('SCONS_PROGRESS'):
   Progress(progress_function, interval=node_interval)
@@ -278,7 +254,13 @@ else:
 
   qt_gui_path = os.path.join(qt_install_headers, "QtGui")
   qt_gui_dirs = [d for d in os.listdir(qt_gui_path) if os.path.isdir(os.path.join(qt_gui_path, d))]
-  qt_dirs += [f"{qt_install_headers}/QtGui/{qt_gui_dirs[0]}/QtGui", ] if qt_gui_dirs else []
+  qt_dirs += (
+    [
+      f"{qt_install_headers}/QtGui/{qt_gui_dirs[0]}/QtGui",
+    ]
+    if qt_gui_dirs
+    else []
+  )
   qt_dirs += [f"{qt_install_headers}/Qt{m}" for m in qt_modules]
 
   qt_libs = [f"Qt5{m}" for m in qt_modules]
@@ -305,7 +287,9 @@ qt_flags = [
   "-DQT_MESSAGELOGCONTEXT",
 ]
 qt_env['CXXFLAGS'] += qt_flags
-qt_env['LIBPATH'] += ['#selfdrive/ui', ]
+qt_env['LIBPATH'] += [
+  '#selfdrive/ui',
+]
 qt_env['LIBS'] = qt_libs
 
 if GetOption("clazy"):
@@ -340,7 +324,12 @@ SConscript(['opendbc_repo/SConscript'], exports={'env': env_swaglog})
 SConscript(['cereal/SConscript'])
 
 Import('socketmaster', 'msgq')
-messaging = [socketmaster, msgq, 'capnp', 'kj',]
+messaging = [
+  socketmaster,
+  msgq,
+  'capnp',
+  'kj',
+]
 Export('messaging')
 
 
@@ -351,17 +340,21 @@ SConscript(['panda/SConscript'])
 SConscript(['rednose/SConscript'])
 
 # Build system services
-SConscript([
-  'system/proclogd/SConscript',
-  'system/ubloxd/SConscript',
-  'system/loggerd/SConscript',
-])
+SConscript(
+  [
+    'system/proclogd/SConscript',
+    'system/ubloxd/SConscript',
+    'system/loggerd/SConscript',
+  ]
+)
 
 if arch != "Darwin":
-  SConscript([
-    'system/sensord/SConscript',
-    'system/logcatd/SConscript',
-  ])
+  SConscript(
+    [
+      'system/sensord/SConscript',
+      'system/logcatd/SConscript',
+    ]
+  )
 
 if arch == "larch64":
   SConscript(['system/camerad/SConscript'])
@@ -372,6 +365,7 @@ SConscript(['third_party/SConscript'])
 SConscript(['selfdrive/SConscript'])
 
 SConscript('qcpilot/cufud/SConscript')
+SConscript('qcpilot/shott/SConscript')
 
 # SConscript(['tools/replay/SConscript'])
 # SConscript(['tools/cabana/SConscript'])

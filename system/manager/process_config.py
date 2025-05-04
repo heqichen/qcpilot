@@ -120,6 +120,7 @@ procs = [
   # QC
   PythonProcess("external_storage", "qc.external_storage", always_run),
   NativeProcess("cufud", "qcpilot/cufud", ["./cufud"], only_onroad),
+  NativeProcess("shott", "qcpilot/shott", ["./shott"], always_run),
   # debug procs
   NativeProcess("bridge", "cereal/messaging", ["./bridge"], notcar),
   PythonProcess("webrtcd", "system.webrtc.webrtcd", notcar),
