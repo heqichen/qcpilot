@@ -146,7 +146,8 @@
     "openpilot",
     "qcpilot",
     "Ratekeeper",
-    "selfdrive"
+    "selfdrive",
+    "shott"
   ],
   "logFileHighlighter.enableProgressIndicator": true,
   "logFileHighlighter.customPatterns": []

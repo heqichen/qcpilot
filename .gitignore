@@ -12,6 +12,7 @@ qcpilot/cufud/**/*.o
 qcpilot/cufud/cufud
 qcpilot/shott/main.o
 qcpilot/shott/shott
+qcpilot/shott/shott.o
 
 
 cereal/gen/**
