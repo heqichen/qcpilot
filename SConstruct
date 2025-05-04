@@ -303,7 +303,11 @@ if GetOption("clazy"):
   qt_env['ENV']['CLAZY_IGNORE_DIRS'] = qt_dirs[0]
   qt_env['ENV']['CLAZY_CHECKS'] = ','.join(checks)
 
-Export('env', 'qt_env', 'arch', 'real_arch')
+qc_env = env.Clone()
+qc_env['CPPPATH'] += ["#openpilot/qcpilot/shott/libs/cereal-1.3.2"]
+
+Export('env', 'qt_env', 'qc_env', 'arch', 'real_arch')
+
 
 # Build common module
 SConscript(['common/SConscript'])
