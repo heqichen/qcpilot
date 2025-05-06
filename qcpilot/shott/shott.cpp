@@ -43,9 +43,6 @@ void Shott::step() {
     if (sm_.updated("qcMazdaState")) {
         frame_.engineRpm = sm_["qcMazdaState"].getQcMazdaState().getEngineRpm();
         // process message
-        std::printf("got mazda state, %u\r\n", frame_.engineRpm);
-    } else {
-        std::printf("no mazda state\r\n");
     }
 
 
