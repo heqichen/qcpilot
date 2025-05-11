@@ -2,10 +2,14 @@
   "env": {
     "myIncludePath": [
       // "/usr/include",
+      "/usr/include/dbus-1.0",
+      "/usr/lib/x86_64-linux-gnu/dbus-1.0/include",
       "/usr/include/c++/13",
       "/usr/include/x86_64-linux-gnu/qt5",
       "/usr/include/x86_64-linux-gnu/qt5/QtCore",
       "/usr/include/x86_64-linux-gnu/qt5/QtWidgets",
+      "/usr/include/x86_64-linux-gnu/qt5/QtGui",
+      "/usr/include/x86_64-linux-gnu/qt5/QtDBus",
       "${workspaceFolder}",
       "${workspaceFolder}/third_party/acados/include",
       "${workspaceFolder}/third_party/acados/include/blasfeo/include",

@@ -122,7 +122,12 @@
     "unordered_set": "cpp",
     "cinttypes": "cpp",
     "fstream": "cpp",
-    "regex": "cpp"
+    "regex": "cpp",
+    "qapplication": "cpp",
+    "qtdbus": "cpp",
+    "qpixmap": "cpp",
+    "qwidget": "cpp",
+    "qsurfaceformat": "cpp"
   },
   "terminal.integrated.env.linux": {
     "PYTHONPATH": "${workspaceFolder}"
