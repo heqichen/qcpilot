@@ -1,87 +1,57 @@
-#include <cstddef>
+// receiver.cpp
 #include <cstdint>
-#include <cstdio>
 #include <dbus/dbus.h>
 #include <iostream>
-#include <tuple>
-#include <unistd.h>
 
-int main(int, const char *[], const char *[]) {
-  DBusMessage *msg;
-  DBusMessageIter args;
-  DBusConnection *conn;
+int main() {
   DBusError err;
-  int ret;
-  // char *sigvalue;
-
-  printf("Listening for signals\n");
-
-  // initialise the errors
   dbus_error_init(&err);
 
-  // connect to the bus and check for errors
-  conn = dbus_bus_get(DBUS_BUS_SYSTEM, &err);
+  DBusConnection *conn = dbus_bus_get(DBUS_BUS_SESSION, &err);
   if (dbus_error_is_set(&err)) {
-    fprintf(stderr, "Connection Error (%s)\n", err.message);
+    std::cerr << "Connection Error : " << err.message << std::endl;
     dbus_error_free(&err);
+    return 1;
   }
-  if (NULL == conn) {
-    exit(1);
+  if (!conn) {
+    std::cerr << "Failed to connect to the bus" << std::endl;
+    return 1;
   }
 
-  // request our name on the bus and check for errors
-  ret = dbus_bus_request_name(conn, "org.freedesktop.NetworkManager",
-                              DBUS_NAME_FLAG_REPLACE_EXISTING, &err);
-  if (dbus_error_is_set(&err)) {
-    fprintf(stderr, "Name Error (%s)\n", err.message);
-    dbus_error_free(&err);
-  }
-  if (DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER != ret) {
-    exit(1);
-  }
+  const char *signal_name = "org.freedesktop.NetworkManager";
+  //  const char *signal_path = "/org/freedesktop/NetworkManager";
+  const char *signal_interface = "org.freedesktop.NetworkManager";
 
-  // add a rule for which messages we want to see
-  // see signals from the given interface
   dbus_bus_add_match(
-      conn, "type='signal',interface='org.freedesktop.NetworkManager'", &err);
+      conn,
+      "type='signal',interface='org.freedesktop.NetworkManager',member='"
+      "StateChanged'",
+      &err);
   dbus_connection_flush(conn);
   if (dbus_error_is_set(&err)) {
-    fprintf(stderr, "Match Error (%s)\n", err.message);
-    exit(1);
+    std::cerr << "Match Error: " << err.message << std::endl;
+    dbus_error_free(&err);
+    dbus_connection_unref(conn);
+    return 1;
   }
-  printf("Match rule sent\n");
 
-  // loop listening for signals being emmitted
   while (true) {
-
-    // non blocking read of the next available message
     dbus_connection_read_write(conn, 0);
-    msg = dbus_connection_pop_message(conn);
+    DBusMessage *msg = dbus_connection_pop_message(conn);
 
-    // loop again if we haven't read a message
-    if (NULL == msg) {
-      usleep(1000000);
+    if (msg == nullptr) {
       continue;
     }
 
-    // check if the message is a signal from the correct interface and with the
-    // correct name
-    std::uint32_t value{0U};
-    if (dbus_message_is_signal(msg, "org.freedesktop.NetworkManager",
-                               "StateChanged")) {
-      // read the parameters
-      if (!dbus_message_iter_init(msg, &args))
-        fprintf(stderr, "Message Has No Parameters\n");
-      else if (DBUS_TYPE_UINT32 != dbus_message_iter_get_arg_type(&args))
-        fprintf(stderr, "Argument is not string!\n");
-      else
-        dbus_message_iter_get_basic(&args, &value);
-
-      printf("Got Signal with value %u\n", value);
+    if (dbus_message_is_signal(msg, signal_interface, signal_name)) {
+      DBusMessageIter iter;
+      dbus_message_iter_init(msg, &iter);
+      std::uint32_t data;
+      dbus_message_iter_get_basic(&iter, &data);
+      std::cout << "Received signal: " << data << std::endl;
     }
-
-    // free the message
     dbus_message_unref(msg);
   }
+  dbus_connection_unref(conn);
   return 0;
 }
