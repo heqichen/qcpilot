@@ -1,18 +1,13 @@
-#include <cassert>
-#include "openpilot/qcpilot/shott/shott.h"
-#include "system/hardware/hw.h"
+#include <QCoreApplication>
+#include "shott.h"
 
+int main(int argc, char *argv[], const char *envs[]) {
+    QCoreApplication app(argc, argv);
+    Shott shott;
 
-int main(int argc, const char *argv[], const char *envs[]) {
-    if (!Hardware::PC()) {
-        int ret;
-        ret = util::set_realtime_priority(53);
-        assert(ret == 0);
-        ret = util::set_core_affinity({4});
-        assert(ret == 0);
+    while (true) {
+        app.processEvents();
+        shott.step();
     }
-
-    qcpilot::shott::Shott shott;
-    shott.loop();
     return 0;
 }
