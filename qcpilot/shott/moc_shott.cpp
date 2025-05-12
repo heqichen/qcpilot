@@ -21,25 +21,25 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_Shott_t {
+struct qt_meta_stringdata_qcpilot__Shott_t {
     QByteArrayData data[1];
-    char stringdata0[6];
+    char stringdata0[15];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_Shott_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_qcpilot__Shott_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_Shott_t qt_meta_stringdata_Shott = {
+static const qt_meta_stringdata_qcpilot__Shott_t qt_meta_stringdata_qcpilot__Shott = {
     {
-QT_MOC_LITERAL(0, 0, 5) // "Shott"
+QT_MOC_LITERAL(0, 0, 14) // "qcpilot::Shott"
 
     },
-    "Shott"
+    "qcpilot::Shott"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_Shott[] = {
+static const uint qt_meta_data_qcpilot__Shott[] = {
 
  // content:
        8,       // revision
@@ -55,7 +55,7 @@ static const uint qt_meta_data_Shott[] = {
        0        // eod
 };
 
-void Shott::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void qcpilot::Shott::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     (void)_o;
     (void)_id;
@@ -63,30 +63,30 @@ void Shott::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void 
     (void)_a;
 }
 
-QT_INIT_METAOBJECT const QMetaObject Shott::staticMetaObject = { {
+QT_INIT_METAOBJECT const QMetaObject qcpilot::Shott::staticMetaObject = { {
     QMetaObject::SuperData::link<QObject::staticMetaObject>(),
-    qt_meta_stringdata_Shott.data,
-    qt_meta_data_Shott,
+    qt_meta_stringdata_qcpilot__Shott.data,
+    qt_meta_data_qcpilot__Shott,
     qt_static_metacall,
     nullptr,
     nullptr
 } };
 
 
-const QMetaObject *Shott::metaObject() const
+const QMetaObject *qcpilot::Shott::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *Shott::qt_metacast(const char *_clname)
+void *qcpilot::Shott::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_Shott.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_qcpilot__Shott.stringdata0))
         return static_cast<void*>(this);
     return QObject::qt_metacast(_clname);
 }
 
-int Shott::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int qcpilot::Shott::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QObject::qt_metacall(_c, _id, _a);
     return _id;
