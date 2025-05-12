@@ -3,7 +3,7 @@
 
 int main(int argc, char *argv[], const char *envs[]) {
     QCoreApplication app(argc, argv);
-    Shott shott;
+    qcpilot::Shott shott {};
 
     while (true) {
         app.processEvents();

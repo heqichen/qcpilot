@@ -127,7 +127,8 @@
     "qtdbus": "cpp",
     "qpixmap": "cpp",
     "qwidget": "cpp",
-    "qsurfaceformat": "cpp"
+    "qsurfaceformat": "cpp",
+    "qcoreapplication": "cpp"
   },
   "terminal.integrated.env.linux": {
     "PYTHONPATH": "${workspaceFolder}"
