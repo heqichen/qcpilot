@@ -9,6 +9,10 @@ int main(int argc, char *argv[], const char *envs[]) {
     while (true) {
         app.processEvents();
         network.step();
+        if (network.isDirty()) {
+            printf("network changed\r\n");
+            network.clear();
+        }
     }
     return 0;
 }
