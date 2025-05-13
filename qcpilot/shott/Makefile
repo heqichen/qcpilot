@@ -53,10 +53,10 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = main.cpp \
-		shott.cpp moc_shott.cpp
+		network.cpp moc_network.cpp
 OBJECTS       = main.o \
-		shott.o \
-		moc_shott.o
+		network.o \
+		moc_network.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -151,9 +151,9 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		shott.pro shott.h \
+		shott.pro network.h \
 		network_def.h main.cpp \
-		shott.cpp
+		network.cpp
 QMAKE_TARGET  = shott
 DESTDIR       = 
 TARGET        = shott
@@ -371,8 +371,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents shott.h network_def.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp shott.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents network.h network_def.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp network.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -404,14 +404,14 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_shott.cpp
+compiler_moc_header_make_all: moc_network.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_shott.cpp
-moc_shott.cpp: shott.h \
+	-$(DEL_FILE) moc_network.cpp
+moc_network.cpp: network.h \
 		network_def.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/heqichen/workspace/qcpilot/qcpilot/shott/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/heqichen/workspace/qcpilot/qcpilot/shott -I/home/heqichen/workspace/qcpilot/qcpilot/shott -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include shott.h -o moc_shott.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/heqichen/workspace/qcpilot/qcpilot/shott/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/heqichen/workspace/qcpilot/qcpilot/shott -I/home/heqichen/workspace/qcpilot/qcpilot/shott -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtDBus -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/x86_64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/x86_64-linux-gnu/13/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include network.h -o moc_network.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -427,16 +427,15 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean
 
 ####### Compile
 
-main.o: main.cpp shott.h \
-		network_def.h
+main.o: main.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
-shott.o: shott.cpp shott.h \
+network.o: network.cpp network.h \
 		network_def.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o shott.o shott.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o network.o network.cpp
 
-moc_shott.o: moc_shott.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_shott.o moc_shott.cpp
+moc_network.o: moc_network.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_network.o moc_network.cpp
 
 ####### Install
 

@@ -1,11 +1,12 @@
-#include "shott.h"
+#include "network.h"
 #include <QtDBus>
 #include <cstdio>
 #include "network_def.h"
 
 namespace qcpilot {
 
-Shott::Shott(QObject *parent) : QObject(parent), adapters_ {}, isDirty_ {false} {
+
+Network::Network(QObject *parent) : QObject(parent), adapters_ {}, isDirty_ {false} {
     adapters_ = getAdapters();
     QDBusConnection::systemBus().connect(
       NM_DBUS_SERVICE, NM_DBUS_PATH, NM_DBUS_INTERFACE, "DeviceAdded", this, SLOT(deviceAdded(QDBusObjectPath)));
@@ -13,7 +14,7 @@ Shott::Shott(QObject *parent) : QObject(parent), adapters_ {}, isDirty_ {false} 
     //   NM_DBUS_SERVICE, NM_DBUS_PATH, NM_DBUS_INTERFACE, "DeviceRemoved", this, SLOT(deviceRemoved(QDBusObjectPath)));
 }
 
-std::vector<QString> Shott::getAdapters() {
+std::vector<QString> Network::getAdapters() {
     std::vector<QString> adapters {};
     QDBusReply<QList<QDBusObjectPath>> response = call(NM_DBUS_PATH, NM_DBUS_INTERFACE, "GetDevices");
     for (const QDBusObjectPath &path : response.value()) {
@@ -22,23 +23,27 @@ std::vector<QString> Shott::getAdapters() {
     return adapters;
 }
 
-void Shott::deviceAdded(const QDBusObjectPath &path) {
+void Network::deviceAdded(const QDBusObjectPath &path) {
     adapters_.push_back(path.path());
     // std::printf("device added: %s\r\n", path.path().toStdString().c_str());
 }
-void Shott::deviceRemoved(const QDBusObjectPath &path) {
+void Network::deviceRemoved(const QDBusObjectPath &path) {
+    std::ignore = path;
     // std::printf("device removed: %s\r\n", path.path().toStdString().c_str());
 }
 
-void Shott::stateChange(unsigned int new_state, unsigned int previous_state, unsigned int change_reason) {
+void Network::stateChange(unsigned int new_state, unsigned int previous_state, unsigned int change_reason) {
+    std::ignore = new_state;
+    std::ignore = previous_state;
+    std::ignore = change_reason;
     isDirty_ = true;
 }
 
-void Shott::step() {
+void Network::step() {
     registerStateChange();
 }
 
-void Shott::registerStateChange() {
+void Network::registerStateChange() {
     QDBusConnection bus = QDBusConnection::systemBus();
     for (const QString &devicePath : adapters_) {
         bus.connect(NM_DBUS_SERVICE,
