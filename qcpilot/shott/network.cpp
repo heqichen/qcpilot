@@ -52,7 +52,7 @@ void Network::registerStateChange() {
                     "StateChanged",
                     this,
                     SLOT(stateChange(unsigned int, unsigned int, unsigned int)));
-        std::printf("register state change: %s\r\n", devicePath.toStdString().c_str());
+        // std::printf("register state change: %s\r\n", devicePath.toStdString().c_str());
     }
     adapters_.clear();
 }
