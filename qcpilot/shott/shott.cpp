@@ -5,12 +5,12 @@
 
 namespace qcpilot {
 
-Shott::Shott(QObject *parent) : QObject(parent), adapters_ {} {
+Shott::Shott(QObject *parent) : QObject(parent), adapters_ {}, isDirty_ {false} {
     adapters_ = getAdapters();
     QDBusConnection::systemBus().connect(
       NM_DBUS_SERVICE, NM_DBUS_PATH, NM_DBUS_INTERFACE, "DeviceAdded", this, SLOT(deviceAdded(QDBusObjectPath)));
-    QDBusConnection::systemBus().connect(
-      NM_DBUS_SERVICE, NM_DBUS_PATH, NM_DBUS_INTERFACE, "DeviceRemoved", this, SLOT(deviceRemoved(QDBusObjectPath)));
+    // QDBusConnection::systemBus().connect(
+    //   NM_DBUS_SERVICE, NM_DBUS_PATH, NM_DBUS_INTERFACE, "DeviceRemoved", this, SLOT(deviceRemoved(QDBusObjectPath)));
 }
 
 std::vector<QString> Shott::getAdapters() {
@@ -23,23 +23,33 @@ std::vector<QString> Shott::getAdapters() {
 }
 
 void Shott::deviceAdded(const QDBusObjectPath &path) {
-    std::printf("device added: %s\r\n", path.path().toStdString().c_str());
+    adapters_.push_back(path.path());
+    // std::printf("device added: %s\r\n", path.path().toStdString().c_str());
 }
 void Shott::deviceRemoved(const QDBusObjectPath &path) {
-    std::printf("device removed: %s\r\n", path.path().toStdString().c_str());
+    // std::printf("device removed: %s\r\n", path.path().toStdString().c_str());
 }
 
+void Shott::stateChange(unsigned int new_state, unsigned int previous_state, unsigned int change_reason) {
+    isDirty_ = true;
+}
 
 void Shott::step() {
-    // std::printf("=======================\r\n");
-    // for (const auto &a : adapters_) {
-    //     std::printf("%s\r\n", a.toStdString().c_str());
-    // }
-    // std::printf("=======================\r\n\r\n\r\n");
-    // Implement the logic for each step of the Shott process here.
-    // This could involve processing data, updating state, etc.
-    // For example:
-    // qDebug() << "Shott step executed";
+    registerStateChange();
+}
+
+void Shott::registerStateChange() {
+    QDBusConnection bus = QDBusConnection::systemBus();
+    for (const QString &devicePath : adapters_) {
+        bus.connect(NM_DBUS_SERVICE,
+                    devicePath,
+                    NM_DBUS_INTERFACE_DEVICE,
+                    "StateChanged",
+                    this,
+                    SLOT(stateChange(unsigned int, unsigned int, unsigned int)));
+        std::printf("register state change: %s\r\n", devicePath.toStdString().c_str());
+    }
+    adapters_.clear();
 }
 
 }    // namespace qcpilot

@@ -40,14 +40,23 @@ class Shott : public QObject {
     Shott(QObject *parent = nullptr);
     virtual ~Shott() {}
     void step();
+    bool isDirty() const {
+        return isDirty_;
+    }
+    void clear() {
+        isDirty_ = false;
+    }
 
   private:
     std::vector<QString> adapters_;
+    bool isDirty_;
 
     std::vector<QString> getAdapters();
+    void registerStateChange();
   private slots:
     void deviceAdded(const QDBusObjectPath &path);
     void deviceRemoved(const QDBusObjectPath &path);
+    void stateChange(unsigned int new_state, unsigned int previous_state, unsigned int change_reason);
 
 };    // classShott:public QObject
 }    // namespace qcpilot
