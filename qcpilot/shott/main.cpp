@@ -1,13 +1,13 @@
 #include <QCoreApplication>
-#include "shott.h"
+#include "network.h"
 
 int main(int argc, char *argv[], const char *envs[]) {
     QCoreApplication app(argc, argv);
-    qcpilot::Shott shott {};
+    qcpilot::Network network {};
 
     while (true) {
         app.processEvents();
-        shott.step();
+        network.step();
     }
     return 0;
 }

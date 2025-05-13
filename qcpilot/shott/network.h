@@ -8,7 +8,6 @@
 
 namespace qcpilot {
 
-
 template<typename T = QDBusMessage, typename... Args>
 T call(const QString &path, const QString &interface, const QString &method, Args &&...args) {
     QDBusInterface nm(NM_DBUS_SERVICE, path, interface, QDBusConnection::systemBus());
@@ -34,11 +33,11 @@ T call(const QString &path, const QString &interface, const QString &method, Arg
     return T();
 }
 
-class Shott : public QObject {
+class Network : public QObject {
     Q_OBJECT
   public:
-    Shott(QObject *parent = nullptr);
-    virtual ~Shott() {}
+    Network(QObject *parent = nullptr);
+    virtual ~Network() {}
     void step();
     bool isDirty() const {
         return isDirty_;
@@ -58,6 +57,7 @@ class Shott : public QObject {
     void deviceRemoved(const QDBusObjectPath &path);
     void stateChange(unsigned int new_state, unsigned int previous_state, unsigned int change_reason);
 
-};    // classShott:public QObject
+};    // class Network
+
 }    // namespace qcpilot
 #endif
