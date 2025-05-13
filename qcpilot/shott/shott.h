@@ -45,6 +45,10 @@ class Shott : public QObject {
     std::vector<QString> adapters_;
 
     std::vector<QString> getAdapters();
+  private slots:
+    void deviceAdded(const QDBusObjectPath &path);
+    void deviceRemoved(const QDBusObjectPath &path);
+
 };    // classShott:public QObject
 }    // namespace qcpilot
 #endif
