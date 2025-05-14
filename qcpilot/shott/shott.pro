@@ -5,6 +5,8 @@
 TEMPLATE = app
 TARGET = shott
 INCLUDEPATH += .
+INCLUDEPATH += ../../
+
 
 # You can make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
