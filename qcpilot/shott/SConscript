@@ -60,9 +60,7 @@ qt_flags = [
     "-DQT_MESSAGELOGCONTEXT",
 ]
 qt_env['CXXFLAGS'] += qt_flags
-qt_env['LIBPATH'] += [
-    '#selfdrive/ui',
-]
+qt_env['LIBPATH'] += []
 qt_env['LIBS'] = qt_libs + ["common", "zmq", "json11"]
 
 if GetOption("clazy"):
@@ -78,4 +76,4 @@ if GetOption("clazy"):
 
 
 # qt.Library("shott", ["main.cpp", "network.cpp"])
-qt_env.Program("shott", ["main.cpp", "network.cpp"])
+qt_env.Program("shott", ["main.cpp", "network.cpp", "shott.cpp"])
