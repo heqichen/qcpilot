@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[], const char *envs[]) {
     std::ignore = envs;
-    RateKeeper rateKeeper {"shott", 1};
+    RateKeeper rateKeeper {"shott", 50};
     QCoreApplication app(argc, argv);
     qcpilot::Network network {};
     qcpilot::Shott shott {};
@@ -21,7 +21,7 @@ int main(int argc, char *argv[], const char *envs[]) {
         }
         shott.step();
 
-        printf("%d\r\n", isMyselfNotLagging);
+        // printf("%d\r\n", isMyselfNotLagging);
     }
     return 0;
 }
