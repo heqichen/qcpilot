@@ -62,7 +62,7 @@ void Shott::step() {
         cereal::PortableBinaryOutputArchive archive(oss);
         archive(frame_);
     }
-    std::cout << "size: " << oss.str().size() << std::endl;
+    // std::cout << "size: " << oss.str().size() << std::endl;
     errno = 0;
     const ssize_t sentSize =
       sendto(socketFd_, oss.str().data(), oss.str().size(), 0, (struct sockaddr *)&mcastAddr_, sizeof(mcastAddr_));
