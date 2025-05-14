@@ -5,14 +5,23 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <sstream>
+#include "cereal/archives/portable_binary.hpp"
+#include "cereal/messaging/messaging.h"
+#include "openpilot/qcpilot/shott/data_def.h"
 
 namespace qcpilot {
 
+namespace {
 
+const std::vector<const char *> kSignals {"qcMazdaState", "carState", "deviceState"};
 #define MCAST_PORT 1900
 #define MCAST_ADDR "239.238.237.236"
 
-Shott::Shott() : socketFd_ {-1}, mcastAddr_ {} {
+}    // namespace
+
+
+Shott::Shott() : socketFd_ {-1}, mcastAddr_ {}, frame_ {}, sm_ {kSignals} {
     // Create socket
     socketFd_ = socket(AF_INET, SOCK_DGRAM, 0);
     if (socketFd_ == -1) {
@@ -34,5 +43,32 @@ void Shott::rebindNetwork() {
     socketFd_ = socket(AF_INET, SOCK_DGRAM, 0);
 }
 
-void Shott::step() {}
+void Shott::step() {
+    // Reset memory
+    std::memset(&frame_, 0x00, sizeof(frame_));
+
+
+    // update message
+    sm_.update(0);
+    if (sm_.updated("qcMazdaState")) {
+        frame_.engineRpm = sm_["qcMazdaState"].getQcMazdaState().getEngineRpm();
+        // process message
+    }
+
+
+    // publish frame data
+    std::ostringstream oss(std::ios::binary);
+    {
+        cereal::PortableBinaryOutputArchive archive(oss);
+        archive(frame_);
+    }
+    std::cout << "size: " << oss.str().size() << std::endl;
+    errno = 0;
+    const ssize_t sentSize =
+      sendto(socketFd_, oss.str().data(), oss.str().size(), 0, (struct sockaddr *)&mcastAddr_, sizeof(mcastAddr_));
+    if (sentSize < 0) {
+        std::fprintf(stderr, "Failed to send data to %d, errno=%d\r\n", socketFd_, errno);
+        std::exit(-2);
+    }
+}
 }    // namespace qcpilot

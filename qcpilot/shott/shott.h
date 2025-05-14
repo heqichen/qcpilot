@@ -3,6 +3,8 @@
 
 #include <arpa/inet.h>
 #include <net/if.h>
+#include "cereal/messaging/messaging.h"
+#include "openpilot/qcpilot/shott/data_def.h"
 
 namespace qcpilot {
 
@@ -15,6 +17,8 @@ class Shott {
   private:
     int socketFd_ {-1};
     struct sockaddr_in mcastAddr_ {};
+    struct ConsoleFrame frame_;
+    SubMaster sm_;
 };
 
 }    // namespace qcpilot
