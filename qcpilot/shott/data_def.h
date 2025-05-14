@@ -1,9 +1,9 @@
-#ifndef __QCPILOT_SHOTT_DATA_DEF_H__
-#define __QCPILOT_SHOTT_DATA_DEF_H__
+#ifndef __OPENPILOT_QCPILOT_SHOTT_DATA_DEF_H__
+#define __OPENPILOT_QCPILOT_SHOTT_DATA_DEF_H__
 #include <cstdint>
 
 namespace qcpilot {
-namespace shott {
+
 
 struct ConsoleFrame {
     std::uint16_t engineRpm {0U};    // RPM
@@ -18,7 +18,7 @@ struct ConsoleFrame {
         ar(engineRpm, speedKph, brake, gas, ax, ay);
     }
 };
-}    // namespace shott
+
 }    // namespace qcpilot
 
 #endif
