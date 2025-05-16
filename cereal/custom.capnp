@@ -16,8 +16,6 @@ struct QcPilotCufuState @0x81c2f05a394cf4af {
   isLongitudinalActive @2 :Bool;
   isLateralActive @3 :Bool;
 
-
-
   struct StateEvaluators {
     carRecognized @0 :Bool;
     onCar @1 :Bool;
@@ -55,16 +53,18 @@ struct QcMazdaState @0xaedffd8f31e7b55d {
   wheelSpeedFRKph @3: Float32;
   wheelSpeedRLKph @4: Float32;
   wheelSpeedRRKph @5: Float32;
+  accelX @6: Float32;
+  accelY @7: Float32;
 
-  isCruiseAvailable @6 : Bool;
-  isCruiseActive @7 : Bool;
-  isAccActive @8: Bool;
+  isCruiseAvailable @8 : Bool;
+  isCruiseActive @9 : Bool;
+  isAccActive @10: Bool;
 
-  cruiseButtonState @9 :Bool;
-  lkasButtonState @10 :Bool;
+  cruiseButtonState @11 :Bool;
+  lkasButtonState @12 :Bool;
 
 # temp added
-  isLkasBlocked @11: Bool;
+  isLkasBlocked @13: Bool;
 }
 
 struct CustomReserved2 @0xf35cc4560bbf6ec2 {
