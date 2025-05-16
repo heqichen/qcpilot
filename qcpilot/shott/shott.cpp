@@ -52,6 +52,9 @@ void Shott::step() {
     sm_.update(0);
     if (sm_.updated("qcMazdaState")) {
         frame_.engineRpm = sm_["qcMazdaState"].getQcMazdaState().getEngineRpm();
+        frame_.speedKph = sm_["qcMazdaState"].getQcMazdaState().getEngineSpeedKph();
+
+
         // process message
     }
 
