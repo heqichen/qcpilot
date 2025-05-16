@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <cassert>
 #include "openpilot/common/ratekeeper.h"
 #include "openpilot/qcpilot/shott/shott.h"
@@ -14,6 +15,7 @@ int main(int argc, char *argv[], const char *envs[]) {
         ret = util::set_core_affinity({4});
         assert(ret == 0);
     }
+    usleep(30000000ULL);    // sleep 30s
     RateKeeper rateKeeper {"shott", 50};
     qcpilot::Shott shott {};
     bool isMyselfNotLagging {false};
