@@ -53,6 +53,10 @@ void Shott::step() {
     if (sm_.updated("qcMazdaState")) {
         frame_.engineRpm = sm_["qcMazdaState"].getQcMazdaState().getEngineRpm();
         frame_.speedKph = sm_["qcMazdaState"].getQcMazdaState().getEngineSpeedKph();
+        frame_.ax = sm_["qcMazdaState"].getQcMazdaState().getAccelX();
+        frame_.ay = sm_["qcMazdaState"].getQcMazdaState().getAccelY();
+        frame_.brake = sm_["qcMazdaState"].getQcMazdaState().getBrakePressure();
+        frame_.gas = sm_["qcMazdaState"].getQcMazdaState().getThrottlePressure();
 
 
         // process message
