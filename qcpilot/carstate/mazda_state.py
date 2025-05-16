@@ -29,6 +29,10 @@ def update_mazda_state(cp: CANParser):
     qcMazdaState.accelX = cp.vl["BRAKE"]["VEHICLE_ACC_X"]
     qcMazdaState.accelY = cp.vl["BRAKE"]["VEHICLE_ACC_Y"]
 
+    # It should be the logic value of brake pedal, [0, 1]
+    qcMazdaState.brakePressure = float(cp.vl["BRAKE"]["BRAKE_PRESSURE"])
+    qcMazdaState.throttlePressure = 0.0
+
     # CRZ = KD + KL
     # KD = ACC
     # True if ACC is ready, but not work. speed is three dots

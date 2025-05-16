@@ -55,16 +55,18 @@ struct QcMazdaState @0xaedffd8f31e7b55d {
   wheelSpeedRRKph @5: Float32;
   accelX @6: Float32;
   accelY @7: Float32;
+  brakePressure @8: Float32;
+  throttlePressure @9: Float32;
 
-  isCruiseAvailable @8 : Bool;
-  isCruiseActive @9 : Bool;
-  isAccActive @10: Bool;
+  isCruiseAvailable @10 : Bool;
+  isCruiseActive @11 : Bool;
+  isAccActive @12: Bool;
 
-  cruiseButtonState @11 :Bool;
-  lkasButtonState @12 :Bool;
+  cruiseButtonState @13 :Bool;
+  lkasButtonState @14 :Bool;
 
 # temp added
-  isLkasBlocked @13: Bool;
+  isLkasBlocked @15: Bool;
 }
 
 struct CustomReserved2 @0xf35cc4560bbf6ec2 {
