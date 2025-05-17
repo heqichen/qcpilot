@@ -1,3 +1,4 @@
+#include <sys/resource.h>
 #include <unistd.h>
 #include <cassert>
 #include "openpilot/common/ratekeeper.h"
@@ -9,13 +10,7 @@ int main(int argc, char *argv[], const char *envs[]) {
     std::ignore = argc;
     std::ignore = argv;
     std::ignore = envs;
-    if (!Hardware::PC()) {
-        int ret;
-        ret = util::set_realtime_priority(53);
-        assert(ret == 0);
-        ret = util::set_core_affinity({4});
-        assert(ret == 0);
-    }
+    setpriority(PRIO_PROCESS, 0, -19);
 
     // Wait for one second for the system
     usleep(1000000ULL);    // sleep 1s
