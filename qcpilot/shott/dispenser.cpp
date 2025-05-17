@@ -1,4 +1,4 @@
-#include "openpilot/qcpilot/shott/shott.h"
+#include "openpilot/qcpilot/shott/dispenser.h"
 #include <arpa/inet.h>
 #include <net/if.h>
 #include <unistd.h>
@@ -10,8 +10,8 @@
 #include "cereal/messaging/messaging.h"
 #include "openpilot/qcpilot/shott/data_def.h"
 
-namespace qcpilot {
-
+namespace cooboc {
+namespace shott {
 namespace {
 
 const std::vector<const char *> kSignals {"qcMazdaState", "carState", "deviceState"};
@@ -20,8 +20,7 @@ const std::vector<const char *> kSignals {"qcMazdaState", "carState", "deviceSta
 
 }    // namespace
 
-
-Shott::Shott() : socketFd_ {-1}, mcastAddr_ {}, frame_ {}, sm_ {kSignals} {
+Dispenser::Dispenser() : socketFd_ {-1}, mcastAddr_ {}, frame_ {}, sm_ {kSignals} {
     // Create socket
     socketFd_ = socket(AF_INET, SOCK_DGRAM, 0);
     if (socketFd_ == -1) {
@@ -35,7 +34,7 @@ Shott::Shott() : socketFd_ {-1}, mcastAddr_ {}, frame_ {}, sm_ {kSignals} {
     mcastAddr_.sin_port = htons(MCAST_PORT);
 }
 
-void Shott::rebindNetwork() {
+void Dispenser::rebindNetwork() {
     if (socketFd_ != -1) {
         close(socketFd_);
         socketFd_ = -1;
@@ -43,7 +42,7 @@ void Shott::rebindNetwork() {
     socketFd_ = socket(AF_INET, SOCK_DGRAM, 0);
 }
 
-void Shott::step() {
+void Dispenser::step() {
     // Reset memory
     std::memset(&frame_, 0x00, sizeof(frame_));
 
@@ -57,7 +56,6 @@ void Shott::step() {
         frame_.ay = sm_["qcMazdaState"].getQcMazdaState().getAccelY();
         frame_.brake = sm_["qcMazdaState"].getQcMazdaState().getBrakePressure();
         frame_.gas = sm_["qcMazdaState"].getQcMazdaState().getThrottlePressure();
-
 
         // process message
     }
@@ -78,4 +76,6 @@ void Shott::step() {
         std::exit(-2);
     }
 }
-}    // namespace qcpilot
+
+}    // namespace shott
+}    // namespace cooboc

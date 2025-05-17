@@ -145,6 +145,7 @@
     "editor.tabSize": 4,
   },
   "cSpell.words": [
+    "cooboc",
     "Cufu",
     "latcontrol",
     "Lkas",
@@ -158,5 +159,6 @@
     "shott"
   ],
   "logFileHighlighter.enableProgressIndicator": true,
-  "logFileHighlighter.customPatterns": []
+  "logFileHighlighter.customPatterns": [],
+  "tabnine.useProxySupport": true
 }
