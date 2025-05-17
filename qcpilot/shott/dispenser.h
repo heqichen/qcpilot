@@ -6,11 +6,12 @@
 #include "cereal/messaging/messaging.h"
 #include "openpilot/qcpilot/shott/data_def.h"
 
-namespace qcpilot {
+namespace cooboc {
+namespace shott {
 
-class Shott {
+class Dispenser {
   public:
-    Shott();
+    Dispenser();
     void rebindNetwork();
     void step();
 
@@ -21,6 +22,7 @@ class Shott {
     SubMaster sm_;
 };
 
-}    // namespace qcpilot
+}    // namespace shott
+}    // namespace cooboc
 
 #endif
