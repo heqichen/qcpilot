@@ -4,8 +4,6 @@ Import('env', 'common', 'messaging')
 
 dbus_headers = subprocess.check_output(['pkg-config', 'dbus-1', '--cflags'], encoding='utf8').strip().split()
 
-print(dbus_headers)
-
 env["CXXFLAGS"] += [dbus_headers]
 env["CPPPATH"] += ["libs/cereal-1.3.2"]
 shott_srcs = ["main.cpp", "network_state.cpp", "dispenser.cpp"]
