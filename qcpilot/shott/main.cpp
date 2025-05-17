@@ -27,8 +27,8 @@ int main(int argc, char *argv[], const char *envs[]) {
         networkState.step();
         if (networkState.isDirty()) {
             networkState.clear();
-            dispenser.rebindNetwork();
             std::printf("need rebind network\r\n");
+            dispenser.rebindNetwork();
         }
         dispenser.step();
     }
