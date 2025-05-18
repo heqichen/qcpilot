@@ -26,8 +26,8 @@ def update_mazda_state(cp: CANParser):
 
   qcMazdaState.cruiseButtonState = cp.vl["CRZ_BTNS"]["MRCC"] == 1
   qcMazdaState.lkasButtonState = cp.vl["CRZ_BTNS"]["LKAS"] == 1
-  qcMazdaState.accelX = cp.vl["BRAKE"]["VEHICLE_ACC_X"]
-  qcMazdaState.accelY = cp.vl["BRAKE"]["VEHICLE_ACC_Y"]
+  qcMazdaState.accelX = float(cp.vl["BRAKE"]["VEHICLE_ACC_X"])
+  qcMazdaState.accelY = float(cp.vl["BRAKE"]["VEHICLE_ACC_Y"])
 
   # It should be the logic value of brake pedal, map [512, 1024] to [0.0, 1.0]
   brake_pressure = float(cp.vl["BRAKE"]["BRAKE_PRESSURE"])
