@@ -56,8 +56,6 @@ void Dispenser::step() {
         frame_.ay = sm_["qcMazdaState"].getQcMazdaState().getAccelY();
         frame_.brake = sm_["qcMazdaState"].getQcMazdaState().getBrakePressure();
         frame_.gas = sm_["qcMazdaState"].getQcMazdaState().getThrottlePressure();
-
-        // process message
     }
 
     if (socketFd_ >= 0) {

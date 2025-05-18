@@ -8,6 +8,7 @@ from openpilot.qcpilot.carstate.mazda_state import update_mazda_state
 
 ButtonType = structs.CarState.ButtonEvent.Type
 
+
 class CarState(CarStateBase):
   def __init__(self, CP):
     super().__init__(CP)
@@ -39,7 +40,8 @@ class CarState(CarStateBase):
       cp.vl["WHEEL_SPEEDS"]["RL"],
       cp.vl["WHEEL_SPEEDS"]["RR"],
     )
-    ret.vEgoRaw = (ret.wheelSpeeds.fl + ret.wheelSpeeds.fr + ret.wheelSpeeds.rl + ret.wheelSpeeds.rr) / 4.
+    ret.vEgoRaw = (ret.wheelSpeeds.fl + ret.wheelSpeeds.fr +
+             ret.wheelSpeeds.rl + ret.wheelSpeeds.rr) / 4.
     ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
 
     # Match panda speed reading
@@ -47,17 +49,19 @@ class CarState(CarStateBase):
     ret.standstill = speed_kph <= .1
 
     can_gear = int(cp.vl["GEAR"]["GEAR"])
-    ret.gearShifter = self.parse_gear_shifter(self.shifter_values.get(can_gear, None))
+    ret.gearShifter = self.parse_gear_shifter(
+      self.shifter_values.get(can_gear, None))
 
     ret.genericToggle = bool(cp.vl["STEER_RATE"]["LKAS_BLOCK"] == 1)
     ret.leftBlindspot = cp.vl["BSM"]["LEFT_BS_STATUS"] != 0
     ret.rightBlindspot = cp.vl["BSM"]["RIGHT_BS_STATUS"] != 0
     ret.leftBlinker, ret.rightBlinker = self.update_blinker_from_lamp(40, cp.vl["BLINK_INFO"]["LEFT_BLINK"] == 1,
-                                                                      cp.vl["BLINK_INFO"]["RIGHT_BLINK"] == 1)
+                                      cp.vl["BLINK_INFO"]["RIGHT_BLINK"] == 1)
 
     ret.steeringAngleDeg = cp.vl["STEER"]["STEER_ANGLE"]
     ret.steeringTorque = cp.vl["STEER_TORQUE"]["STEER_TORQUE_SENSOR"]
-    ret.steeringPressed = abs(ret.steeringTorque) > LKAS_LIMITS.STEER_THRESHOLD
+    ret.steeringPressed = abs(
+      ret.steeringTorque) > LKAS_LIMITS.STEER_THRESHOLD
 
     ret.steeringTorqueEps = cp.vl["STEER_TORQUE"]["STEER_TORQUE_MOTOR"]
     ret.steeringRateDeg = cp.vl["STEER_RATE"]["STEER_ANGLE_RATE"]
@@ -68,10 +72,10 @@ class CarState(CarStateBase):
 
     ret.seatbeltUnlatched = cp.vl["SEATBELT"]["DRIVER_SEATBELT"] == 0
     ret.doorOpen = any([cp.vl["DOORS"]["FL"], cp.vl["DOORS"]["FR"],
-                        cp.vl["DOORS"]["BL"], cp.vl["DOORS"]["BR"]])
+              cp.vl["DOORS"]["BL"], cp.vl["DOORS"]["BR"]])
 
     # TODO: this should be from 0 - 1.
-    ret.gas = cp.vl["ENGINE_DATA"]["PEDAL_GAS"]
+    ret.gas = cp.vl["ENGINE_DATA"]["THROTTLE_PEDAL"]
     ret.gasPressed = ret.gas > 0
 
     # Either due to low speed or hands off
@@ -88,7 +92,7 @@ class CarState(CarStateBase):
       self.lkas_allowed_speed = True
 
     # TODO: the signal used for available seems to be the adaptive cruise signal, instead of the main on
-    #       it should be used for carState.cruiseState.nonAdaptive instead
+    #     it should be used for carState.cruiseState.nonAdaptive instead
     ret.cruiseState.available = cp.vl["CRZ_CTRL"]["CRZ_AVAILABLE"] == 1
     ret.cruiseState.enabled = cp.vl["CRZ_CTRL"]["CRZ_ACTIVE"] == 1
     # QC: This signal may not standstill
@@ -121,7 +125,8 @@ class CarState(CarStateBase):
     ret.steerFaultPermanent = cp_cam.vl["CAM_LKAS"]["ERR_BIT_1"] == 1
 
     # TODO: add button types for inc and dec
-    ret.buttonEvents = create_button_events(self.distance_button, prev_distance_button, {1: ButtonType.gapAdjustCruise})
+    ret.buttonEvents = create_button_events(
+      self.distance_button, prev_distance_button, {1: ButtonType.gapAdjustCruise})
 
     return ret
 
