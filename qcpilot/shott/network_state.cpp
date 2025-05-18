@@ -6,7 +6,9 @@
 namespace cooboc {
 namespace shott {
 
-NetworkState::NetworkState() : dbusSystemConn_ {nullptr}, isDirty_ {false} {
+NetworkState::NetworkState(bool disabled) : isDisabled_ {disabled}, isDirty_ {false}, dbusSystemConn_ {nullptr} {
+    if (isDisabled_)
+        return;
     DBusError error;
     dbus_error_init(&error);
 
@@ -27,6 +29,8 @@ NetworkState::NetworkState() : dbusSystemConn_ {nullptr}, isDirty_ {false} {
 }
 
 void NetworkState::step() {
+    if (isDisabled_)
+        return;
     DBusError error;
     dbus_error_init(&error);
 

@@ -8,7 +8,7 @@ namespace shott {
 
 class NetworkState {
   public:
-    NetworkState();
+    NetworkState(bool disabled = false);
     void step();
     bool isDirty() const {
         return isDirty_;
@@ -18,8 +18,9 @@ class NetworkState {
     };
 
   private:
-    DBusConnection* dbusSystemConn_ {nullptr};
+    bool isDisabled_ {false};
     bool isDirty_ {false};
+    DBusConnection* dbusSystemConn_ {nullptr};
 };
 
 }    // namespace shott
