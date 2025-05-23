@@ -29,10 +29,11 @@ def update_mazda_state(cp: CANParser):
   qcMazdaState.accelX = float(cp.vl["BRAKE"]["VEHICLE_ACC_X"])
   qcMazdaState.accelY = float(cp.vl["BRAKE"]["VEHICLE_ACC_Y"])
 
-  # It should be the logic value of brake pedal, map [512, 1024] to [0.0, 1.0]
+  # It should be the logic value of brake pedal, map [152, 532] to [0.0, 1.0]
   brake_pressure = float(cp.vl["BRAKE"]["BRAKE_PRESSURE"])
-  brakePressure = (brake_pressure - 152.0) / (1024.0 - 152.0)
+  brakePressure = (brake_pressure - 152.0) / (532.0 - 152.0)
   qcMazdaState.brakePressure = brakePressure if brakePressure > 0.0 else 0.0
+  qcMazdaState.brakePressure = brakePressure if brakePressure < 1.0 else 1.0
 
   qcMazdaState.throttlePressure = float(cp.vl["ENGINE_DATA"]["THROTTLE_PEDAL"]) / 1024.0
 
